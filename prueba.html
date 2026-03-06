@@ -11,16 +11,16 @@
 <meta property="og:title" content="Mármol Albisu Ivory | Porcelanato 60x120">
 <meta property="og:description" content="Porcelanato Verve Mármol Albisu Ivory formato 60x120 cm con 8 caras diferentes.">
 
-<!-- CORRECCIÓN IMAGEN PREVIEW -->
 <meta property="og:image" content="https://lh3.googleusercontent.com/d/1r4TuXXIoM4LLh8r07Vsu1aEijT57422Y=w1200">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sites.google.com/gersamex.com.mx/fichas-tecnicas/marmol-albisu-ivory">
 
-<!-- NUEVO: CANONICAL PARA EVITAR LINKS TEMPORALES -->
-<link rel="canonical" href="https://sites.google.com/gersamex.com.mx/fichas-tecnicas/marmol-albisu-ivory">
+<!-- NUEVA URL PARA GITHUB PAGES -->
+<meta property="og:url" content="https://gersa-mex.github.io/prueba.html">
+
+<link rel="canonical" href="https://gersa-mex.github.io/prueba.html">
 
 <meta name="twitter:card" content="summary_large_image">
 
@@ -293,8 +293,6 @@ cursor:pointer;
 z-index:10;
 }
 
-/* RESPONSIVE */
-
 @media(max-width:600px){
 
 .logo-empresa{ height:32px; }
@@ -348,9 +346,9 @@ MÁRMOL ALBISU IVORY
 
 <div class="carousel-wrapper">
 
-<button class="nav left" onclick="scrollCarousel(-1)">‹</button>
+<button class="nav left">‹</button>
 
-<div class="carousel" id="carousel">
+<div class="carousel">
 
 <img class="main-image" src="https://lh3.googleusercontent.com/d/15bSfc-MnoK9kV0ML4Ceed9sKjDwJOCf4">
 <img class="main-image" src="https://lh3.googleusercontent.com/d/1K7HE1bVYqa9hur5t1nv8op6PZto9179T">
@@ -362,8 +360,6 @@ MÁRMOL ALBISU IVORY
 <img class="main-image" src="https://lh3.googleusercontent.com/d/10hGDjvrDlE_uq3iSx7zK2CmRMr-xfc1S">
 
 </div>
-
-<button class="nav right" onclick="scrollCarousel(1)">›</button>
 
 </div>
 
@@ -388,24 +384,6 @@ MÁRMOL ALBISU IVORY
 
 </div>
 
-<div class="container">
-
-<div class="title" style="font-size:22px; margin-top:10px;">
-Adhesivos sugeridos
-</div>
-
-<div class="carousel-wrapper">
-
-<button class="nav left" onclick="scrollCarouselAdhesivos(-1)">‹</button>
-
-<div class="carousel" id="carouselAdhesivos">
-
-<img class="face" src="https://lh3.googleusercontent.com/d/19THsR8e0TvH4ACQKTooO08Ai69_g0DEG">
-<img class="face" src="https://lh3.googleusercontent.com/d/1pFIu3l-uMC5N3tK4ZxVutVHLtr9JXMj2">
-<img class="face" src="https://lh3.googleusercontent.com/d/1SIS77RI3txH9oQ5Wpy78sJDwxi3dTC3F">
-
-</div>
-
 <div class="footer">
 
 <div class="footer-buttons">
@@ -418,132 +396,13 @@ Sistema digital de consulta de producto • Gersa
 
 </div>
 
-<!-- MODAL -->
-
-<div class="modal" id="modal">
-
-<span class="modal-close" onclick="closeModal()">×</span>
-
-<button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
-
-<div class="modal-track" id="modalTrack"></div>
-
-<button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
-
-</div>
-
 <script>
-
-/* CARRUSEL PRINCIPAL */
-
-const track=document.getElementById("mainTrack");
-const slides=document.querySelectorAll(".main-slide");
-const dots=document.getElementById("mainDots");
-
-let index=0;
-let startX=0;
-
-slides.forEach((_,i)=>{
-let dot=document.createElement("span");
-dot.classList.add("main-dot");
-if(i===0) dot.classList.add("active");
-dots.appendChild(dot);
-});
-
-track.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
-});
-
-track.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-if(startX-endX>50 && index<slides.length-1) index++;
-if(endX-startX>50 && index>0) index--;
-track.style.transform=`translateX(-${index*100}%)`;
-document.querySelectorAll(".main-dot").forEach((dot,i)=>{
-dot.classList.toggle("active",i===index);
-});
-});
-
-/* MODAL */
-
-const modal=document.getElementById("modal");
-const modalTrack=document.getElementById("modalTrack");
-
-let modalIndex=0;
-let modalImages=[];
-let startXModal=0;
-
-document.querySelectorAll(".face, .main-image").forEach((img)=>{
-
-img.addEventListener("click",()=>{
-
-if(img.classList.contains("main-image")){
-modalImages=Array.from(document.querySelectorAll(".main-image"));
-}else{
-modalImages=Array.from(img.parentElement.querySelectorAll(".face"));
-}
-
-modalTrack.innerHTML="";
-
-modalImages.forEach(el=>{
-
-let slide=document.createElement("div");
-slide.className="modal-slide";
-
-let image=document.createElement("img");
-image.src=el.src;
-
-slide.appendChild(image);
-modalTrack.appendChild(slide);
-
-});
-
-modalIndex=modalImages.indexOf(img);
-
-updateModal();
-
-modal.classList.add("active");
-
-});
-
-});
-
-function moveModal(dir){
-
-modalIndex+=dir;
-
-if(modalIndex<0) modalIndex=0;
-if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
-
-updateModal();
-
-}
-
-function updateModal(){
-modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
-}
-
-function closeModal(){
-modal.classList.remove("active");
-}
-
-modal.addEventListener("touchstart",e=>{
-startXModal=e.touches[0].clientX;
-});
-
-modal.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-if(startXModal-endX>50) moveModal(1);
-if(endX-startXModal>50) moveModal(-1);
-});
-
-/* COMPARTIR POR WHATSAPP */
 
 const shareBtn=document.getElementById("shareWhatsApp");
 
 shareBtn.addEventListener("click",function(){
 
-let url="https://sites.google.com/gersamex.com.mx/fichas-tecnicas/marmol-albisu-ivory";
+let url=window.location.href;
 
 let mensaje="Mira este modelo de piso:\n\nMÁRMOL ALBISU IVORY\n\n"+url;
 
