@@ -424,6 +424,51 @@ Sistema digital de consulta de producto • Gersa
 
 <script>
 
+/* CARRUSEL PRINCIPAL */
+
+const track=document.getElementById("mainTrack");
+const slides=document.querySelectorAll(".main-slide");
+const dots=document.getElementById("mainDots");
+
+let index=0;
+let startX=0;
+
+slides.forEach((_,i)=>{
+let dot=document.createElement("span");
+dot.classList.add("main-dot");
+if(i===0) dot.classList.add("active");
+dots.appendChild(dot);
+});
+
+track.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+
+track.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startX-endX>50 && index<slides.length-1) index++;
+if(endX-startX>50 && index>0) index--;
+
+track.style.transform=`translateX(-${index*100}%)`;
+
+document.querySelectorAll(".main-dot").forEach((dot,i)=>{
+dot.classList.toggle("active",i===index);
+});
+});
+
+
+/* SCROLL CARRUSEL */
+
+function scrollCarousel(dir){
+const carousel=document.querySelector(".carousel");
+carousel.scrollBy({
+left:dir*200,
+behavior:"smooth"
+});
+}
+
+
 /* MODAL */
 
 const modal=document.getElementById("modal");
@@ -431,6 +476,7 @@ const modalTrack=document.getElementById("modalTrack");
 
 let modalIndex=0;
 let modalImages=[];
+let startXModal=0;
 
 document.querySelectorAll(".face, .main-image").forEach(img=>{
 
@@ -463,6 +509,7 @@ modal.classList.add("active");
 
 });
 
+
 function moveModal(dir){
 
 modalIndex+=dir;
@@ -474,13 +521,30 @@ updateModal();
 
 }
 
+
 function updateModal(){
 modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
 }
 
+
 function closeModal(){
 modal.classList.remove("active");
 }
+
+
+/* SWIPE EN MODAL */
+
+modal.addEventListener("touchstart",e=>{
+startXModal=e.touches[0].clientX;
+});
+
+modal.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startXModal-endX>50) moveModal(1);
+if(endX-startXModal>50) moveModal(-1);
+});
+
 
 /* WHATSAPP */
 
@@ -502,6 +566,7 @@ window.open(whatsappURL,"_blank");
 
 </body>
 </html>
+
 
 
 
