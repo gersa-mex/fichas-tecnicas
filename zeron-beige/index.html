@@ -1,1 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>ZERON BEIGE</title>
+
+<!-- RESPALDO CÓDIGO COMPLETO -->
+
+<!-- PREVIEW PARA WHATSAPP -->
+
+<meta property="og:title" content="ZERON BEIGE | 33x33">
+<meta property="og:description" content="Loseta Verve Zeron Beige formato 33x33 cm.">
+
+<meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-logo-verve.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta property="og:type" content="website">
+
+<!-- NUEVA URL PARA GITHUB PAGES -->
+<meta property="og:url" content="https://gersa-mex.github.io/prueba.html">
+
+<link rel="canonical" href="https://gersa-mex.github.io/prueba.html">
+
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+
+:root{
+--verde:#33cc00;
+--azul:#283876;
+--gris:#f4f7fc;
+--texto:#1f2937;
+--card:#ffffff;
+}
+
+body{
+margin:0;
+font-family:'Century Gothic',sans-serif;
+background:var(--gris);
+color:var(--texto);
+overflow-x:hidden;
+}
+
+/* HEADER */
+
+.header{
+background:#283876;
+padding:10px 18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.25);
+}
+
+.logo-empresa{ height:42px; }
+
+/* CONTENEDOR */
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:16px;
+}
+
+/* TITULO */
+
+.title{
+font-size:26px;
+font-weight:bold;
+color:var(--azul);
+margin-bottom:16px;
+}
+
+/* ===== CARRUSEL PRINCIPAL ===== */
+
+.main-carousel{
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 12px 30px rgba(0,0,0,0.18);
+margin-bottom:22px;
+position:relative;
+}
+
+.main-track{
+display:flex;
+transition:transform .4s ease;
+}
+
+.main-slide{
+min-width:100%;
+cursor:pointer;
+}
+
+.main-slide img{
+width:100%;
+display:block;
+}
+
+.main-dots{
+position:absolute;
+bottom:10px;
+width:100%;
+text-align:center;
+}
+
+.main-dot{
+height:8px;
+width:8px;
+margin:4px;
+background:rgba(255,255,255,.5);
+border-radius:50%;
+display:inline-block;
+}
+
+.main-dot.active{
+background:white;
+}
+
+/* ===== CARRUSELES ===== */
+
+.carousel-wrapper{
+position:relative;
+margin-bottom:28px;
+}
+
+.carousel{
+display:flex;
+gap:14px;
+overflow-x:auto;
+scroll-behavior:smooth;
+padding-bottom:10px;
+}
+
+.carousel::-webkit-scrollbar{
+display:none;
+}
+
+/* TARJETAS DE IMAGEN */
+
+.face{
+min-width:160px;
+height:160px;
+border-radius:14px;
+overflow:hidden;
+cursor:pointer;
+border:3px solid transparent;
+background:white;
+box-shadow:0 6px 14px rgba(0,0,0,0.15);
+transition:0.3s;
+object-fit:cover;
+}
+
+.face:hover{
+border:3px solid var(--verde);
+transform:scale(1.05);
+}
+
+/* BOTONES */
+
+.nav{
+position:absolute;
+top:40%;
+background:var(--verde);
+color:white;
+border:none;
+font-size:22px;
+cursor:pointer;
+padding:10px 15px;
+border-radius:50%;
+z-index:10;
+}
+
+.nav.left{ left:-8px; }
+.nav.right{ right:-8px; }
+
+/* FICHA TECNICA */
+
+.tech-card{
+background:var(--card);
+border-radius:16px;
+padding:20px;
+box-shadow:0 8px 20px rgba(0,0,0,0.12);
+border-top:6px solid var(--verde);
+margin-bottom:30px;
+}
+
+.tech-title{
+font-size:20px;
+font-weight:bold;
+color:var(--azul);
+margin-bottom:14px;
+}
+
+.tech-grid{
+display:flex;
+gap:12px;
+overflow-x:auto;
+}
+
+.tech-item{
+min-width:180px;
+background:#f8fafc;
+padding:12px 16px;
+border-radius:10px;
+border-left:5px solid var(--verde);
+}
+
+.tech-item strong{
+display:block;
+font-size:13px;
+color:#6b7280;
+}
+
+.tech-item span{
+font-weight:bold;
+font-size:15px;
+}
+
+/* FOOTER */
+
+.footer{
+background:var(--azul);
+color:white;
+padding:25px 15px;
+margin-top:40px;
+text-align:center;
+}
+
+.footer-buttons{
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:10px;
+}
+
+.footer a{
+background:var(--verde);
+color:white;
+padding:10px 16px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+.footer a:hover{
+transform:scale(1.05);
+}
+
+/* MODAL */
+
+.modal{
+display:none;
+position:fixed;
+z-index:9999;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:black;
+}
+
+.modal.active{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.modal-track{
+display:flex;
+height:100%;
+transition:transform .4s ease;
+}
+
+.modal-slide{
+min-width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.modal-slide img{
+max-width:95%;
+max-height:90%;
+}
+
+.modal-close{
+position:absolute;
+top:20px;
+right:30px;
+color:white;
+font-size:40px;
+cursor:pointer;
+z-index:10;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+.logo-empresa{ height:32px; }
+
+.title{ font-size:20px; }
+
+.face{
+min-width:130px;
+height:130px;
+}
+
+.footer-buttons{
+flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<img class="logo-empresa"
+src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
+</div>
+
+<div class="container">
+
+<div class="title">ZERON BEIGE</div>
+
+<!-- CARRUSEL PRINCIPAL -->
+
+<div class="main-carousel">
+
+<div class="main-track" id="mainTrack">
+
+<div class="main-slide">
+<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-ambiente-1-verve.jpg">
+</div>
+
+<div class="main-slide">
+<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-ambiente-2-verve.jpg">
+</div>
+
+</div>
+
+<div class="main-dots" id="mainDots"></div>
+
+</div>
+
+<!-- CARRUSEL CARAS -->
+
+<div class="carousel-wrapper">
+
+<button class="nav left" onclick="scrollCarousel(-1)">‹</button>
+
+<div class="carousel">
+
+<img class="face" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-cara-1-verve.jpg">
+<img class="face" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-cara-2-verve.jpg">
+<img class="face" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-cara-3-verve.jpg">
+<img class="face" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-cara-4-verve.jpg">
+<img class="face" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-cara-5-verve.jpg">
+<img class="face" src="https://gersa-mex.github.io/fichas-tecnicas/zeron-beige/zeron-beige-cara-6-verve.jpg">
+
+</div>
+
+<button class="nav right" onclick="scrollCarousel(1)">›</button>
+
+</div>
+
+<!-- FICHA TECNICA -->
+
+<div class="tech-card">
+
+<div class="tech-title">Ficha Técnica</div>
+
+<div class="tech-grid">
+
+<div class="tech-item"><strong>Marca</strong><span>Verve</span></div>
+<div class="tech-item"><strong>Modelo</strong><span>Zeron</span></div>
+<div class="tech-item"><strong>Color</strong><span>Beige</span></div>
+<div class="tech-item"><strong>Formato</strong><span>33x33</span></div>
+<div class="tech-item"><strong>Piezas por caja</strong><span>16</span></div>
+<div class="tech-item"><strong>m2 por caja</strong><span>1.76</span></div>
+<div class="tech-item"><strong>Uso</strong><span>Interior/ exterior / cocina</span></div>
+<div class="tech-item"><strong>Acabado</strong><span>Mate</span></div>
+
+</div>
+
+</div>
+
+<!-- ADHESIVOS -->
+
+<div class="title" style="font-size:22px;">Adhesivos sugeridos</div>
+
+<div class="carousel" id="carouselAdhesivos">
+
+<img class="face" src="https://lh3.googleusercontent.com/d/19THsR8e0TvH4ACQKTooO08Ai69_g0DEG">
+<img class="face" src="https://lh3.googleusercontent.com/d/1pFIu3l-uMC5N3tK4ZxVutVHLtr9JXMj2">
+<img class="face" src="https://lh3.googleusercontent.com/d/1SIS77RI3txH9oQ5Wpy78sJDwxi3dTC3F">
+
+</div>
+
+</div>
+
+<div class="footer">
+
+<div class="footer-buttons">
+<a href="#" id="shareWhatsApp">Compartir por WhatsApp</a>
+</div>
+
+Sistema digital de consulta de producto • Gersa
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+<span class="modal-close" onclick="closeModal()">×</span>
+
+<button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
+
+<div class="modal-track" id="modalTrack"></div>
+
+<button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
+
+</div>
+
+<script>
+
+/* CARRUSEL PRINCIPAL */
+
+const track=document.getElementById("mainTrack");
+const slides=document.querySelectorAll(".main-slide");
+const dots=document.getElementById("mainDots");
+
+let index=0;
+let startX=0;
+
+slides.forEach((_,i)=>{
+let dot=document.createElement("span");
+dot.classList.add("main-dot");
+if(i===0) dot.classList.add("active");
+dots.appendChild(dot);
+});
+
+track.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+
+track.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startX-endX>50 && index<slides.length-1) index++;
+if(endX-startX>50 && index>0) index--;
+
+track.style.transform=`translateX(-${index*100}%)`;
+
+document.querySelectorAll(".main-dot").forEach((dot,i)=>{
+dot.classList.toggle("active",i===index);
+});
+});
+
+
+/* SCROLL CARRUSEL */
+
+function scrollCarousel(dir){
+const carousel=document.querySelector(".carousel");
+carousel.scrollBy({
+left:dir*200,
+behavior:"smooth"
+});
+}
+
+
+/* MODAL */
+
+const modal=document.getElementById("modal");
+const modalTrack=document.getElementById("modalTrack");
+
+let modalIndex=0;
+let modalImages=[];
+let startXModal=0;
+
+document.querySelectorAll(".face, .main-image").forEach(img=>{
+
+img.addEventListener("click",()=>{
+
+modalImages=Array.from(document.querySelectorAll(".face, .main-image"));
+
+modalTrack.innerHTML="";
+
+modalImages.forEach(el=>{
+
+let slide=document.createElement("div");
+slide.className="modal-slide";
+
+let image=document.createElement("img");
+image.src=el.src;
+
+slide.appendChild(image);
+modalTrack.appendChild(slide);
+
+});
+
+modalIndex=modalImages.indexOf(img);
+
+updateModal();
+
+modal.classList.add("active");
+
+});
+
+});
+
+
+function moveModal(dir){
+
+modalIndex+=dir;
+
+if(modalIndex<0) modalIndex=0;
+if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
+
+updateModal();
+
+}
+
+
+function updateModal(){
+modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
+}
+
+
+function closeModal(){
+modal.classList.remove("active");
+}
+
+
+/* SWIPE EN MODAL */
+
+modal.addEventListener("touchstart",e=>{
+startXModal=e.touches[0].clientX;
+});
+
+modal.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startXModal-endX>50) moveModal(1);
+if(endX-startXModal>50) moveModal(-1);
+});
+
+
+/* COMPARTIR POR WHATSAPP */
+
+const shareBtn=document.getElementById("shareWhatsApp");
+
+shareBtn.addEventListener("click",function(){
+
+let url=window.location.href;
+
+let mensaje="*En GERSA tenemos el piso ideal para ti:*:\n\nZERON BEIGE\n\n"+url;
+
+let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
+
+window.open(whatsappURL,"_blank");
+
+});
+
+</script>
+
+</body>
+</html>
