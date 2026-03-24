@@ -82,11 +82,7 @@ overflow:hidden;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
 margin-bottom:22px;
 position:relative;
-
-/* FIX iOS */
-touch-action: pan-y;
 }
-
 
 .main-track{
 display:flex;
@@ -363,7 +359,7 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 
 <div class="carousel-wrapper">
 
-<button class="nav left" onclick="scrollCarousel(-1)">‹</button>
+<button class="nav right" onclick="scrollCarousel(this, 1)">›</button>
 
 <div class="carousel">
 
@@ -460,7 +456,6 @@ track.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX;
 });
 
-
 track.addEventListener("touchend",e=>{
 let endX=e.changedTouches[0].clientX;
 
@@ -477,12 +472,18 @@ dot.classList.toggle("active",i===index);
 
 /* SCROLL CARRUSEL */
 
-function scrollCarousel(dir){
-const carousel=document.querySelector(".carousel");
+function scrollCarousel(btn, dir){
+
+const wrapper = btn.parentElement;
+const carousel = wrapper.querySelector(".carousel");
+
+const scrollAmount = carousel.offsetWidth * 0.6;
+
 carousel.scrollBy({
-left:dir*200,
-behavior:"smooth"
+left: dir * scrollAmount,
+behavior: "smooth"
 });
+
 }
 
 
