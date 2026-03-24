@@ -443,14 +443,15 @@ const track = document.getElementById("mainTrack");
 const slides = document.querySelectorAll(".main-slide");
 const dots = document.getElementById("mainDots");
 
-let index = 0;
+let index = 0; // 👈 ESTO FALTABA
+
 let startX = 0;
 let currentX = 0;
 let isDragging = false;
 
 track.addEventListener("touchstart", e => {
 startX = e.touches[0].clientX;
-currentX = startX; 
+currentX = startX;
 isDragging = true;
 });
 
@@ -463,13 +464,21 @@ track.addEventListener("touchend", () => {
 
 let diff = startX - currentX;
 
-if(diff > 50 && index < slides.length - 1){
+// 👇 sensibilidad más controlada (mejor para iPhone)
+if(diff > 60){
+if(index < slides.length - 1){
 index++;
 }
+}
 
-if(diff < -50 && index > 0){
+if(diff < -60){
+if(index > 0){
 index--;
 }
+}
+
+// 👇 asegura límites SIEMPRE
+index = Math.max(0, Math.min(index, slides.length - 1));
 
 track.style.transform = `translateX(-${index * 100}%)`;
 
@@ -478,6 +487,8 @@ dot.classList.toggle("active", i === index);
 });
 
 isDragging = false;
+startX = 0;
+currentX = 0;
 
 });
 
