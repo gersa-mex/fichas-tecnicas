@@ -460,10 +460,6 @@ track.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX;
 });
 
-/* FIX iOS (ÚNICO AGREGADO JS) */
-track.addEventListener("touchmove", e=>{
-e.preventDefault();
-}, { passive:false });
 
 track.addEventListener("touchend",e=>{
 let endX=e.changedTouches[0].clientX;
