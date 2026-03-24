@@ -82,6 +82,7 @@ overflow:hidden;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
 margin-bottom:22px;
 position:relative;
+touch-action: pan-y;
 }
 
 .main-track{
@@ -359,7 +360,7 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 
 <div class="carousel-wrapper">
 
-<button class="nav right" onclick="scrollCarousel(this, 1)">›</button>
+<button class="nav left" onclick="scrollCarousel(-1)">‹</button>
 
 <div class="carousel">
 
@@ -438,52 +439,57 @@ Sistema digital de consulta de producto • Gersa
 
 /* CARRUSEL PRINCIPAL */
 
-const track=document.getElementById("mainTrack");
-const slides=document.querySelectorAll(".main-slide");
-const dots=document.getElementById("mainDots");
+const track = document.getElementById("mainTrack");
+const slides = document.querySelectorAll(".main-slide");
+const dots = document.getElementById("mainDots");
 
-let index=0;
-let startX=0;
+let index = 0;
+let startX = 0;
+let currentX = 0;
+let isDragging = false;
 
-slides.forEach((_,i)=>{
-let dot=document.createElement("span");
-dot.classList.add("main-dot");
-if(i===0) dot.classList.add("active");
-dots.appendChild(dot);
+track.addEventListener("touchstart", e => {
+startX = e.touches[0].clientX;
+currentX = startX; 
+isDragging = true;
 });
 
-track.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
+track.addEventListener("touchmove", e => {
+if(!isDragging) return;
+currentX = e.touches[0].clientX;
 });
 
-track.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
+track.addEventListener("touchend", () => {
 
-if(startX-endX>50 && index<slides.length-1) index++;
-if(endX-startX>50 && index>0) index--;
+let diff = startX - currentX;
 
-track.style.transform=`translateX(-${index*100}%)`;
+if(diff > 50 && index < slides.length - 1){
+index++;
+}
+
+if(diff < -50 && index > 0){
+index--;
+}
+
+track.style.transform = `translateX(-${index * 100}%)`;
 
 document.querySelectorAll(".main-dot").forEach((dot,i)=>{
-dot.classList.toggle("active",i===index);
+dot.classList.toggle("active", i === index);
 });
+
+isDragging = false;
+
 });
 
 
 /* SCROLL CARRUSEL */
 
-function scrollCarousel(btn, dir){
-
-const wrapper = btn.parentElement;
-const carousel = wrapper.querySelector(".carousel");
-
-const scrollAmount = carousel.offsetWidth * 0.6;
-
+function scrollCarousel(dir){
+const carousel=document.querySelector(".carousel");
 carousel.scrollBy({
-left: dir * scrollAmount,
-behavior: "smooth"
+left:dir*200,
+behavior:"smooth"
 });
-
 }
 
 
