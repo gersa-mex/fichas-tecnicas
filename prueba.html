@@ -34,6 +34,8 @@ color:var(--texto);
 overflow-x:hidden;
 }
 
+/* HEADER */
+
 .header{
 background:#283876;
 padding:10px 18px;
@@ -45,11 +47,15 @@ box-shadow:0 4px 12px rgba(0,0,0,0.25);
 
 .logo-empresa{ height:42px; }
 
+/* CONTENEDOR */
+
 .container{
 max-width:1100px;
 margin:auto;
 padding:16px;
 }
+
+/* TITULO */
 
 .title{
 font-size:26px;
@@ -71,6 +77,10 @@ position:relative;
 .main-track{
 display:flex;
 transition:transform .4s ease;
+
+/* FIX iOS */
+-webkit-overflow-scrolling: touch;
+touch-action: pan-y;
 }
 
 .main-slide{
@@ -116,6 +126,10 @@ gap:14px;
 overflow-x:auto;
 scroll-behavior:smooth;
 padding-bottom:10px;
+
+/* FIX iOS */
+-webkit-overflow-scrolling: touch;
+touch-action: pan-x;
 }
 
 .carousel::-webkit-scrollbar{
@@ -178,29 +192,16 @@ overflow-x:auto;
 -webkit-overflow-scrolling: touch;
 touch-action: pan-x;
 scroll-snap-type: x mandatory;
+overscroll-behavior-x: contain;
 }
 
 .tech-item{
 min-width:180px;
-
-/* SNAP */
-scroll-snap-align: start;
-
+scroll-snap-align:start;
 background:#f8fafc;
 padding:12px 16px;
 border-radius:10px;
 border-left:5px solid var(--verde);
-}
-
-.tech-item strong{
-display:block;
-font-size:13px;
-color:#6b7280;
-}
-
-.tech-item span{
-font-weight:bold;
-font-size:15px;
 }
 
 /* FOOTER */
@@ -228,11 +229,6 @@ padding:10px 16px;
 border-radius:10px;
 text-decoration:none;
 font-weight:bold;
-transition:0.3s;
-}
-
-.footer a:hover{
-transform:scale(1.05);
 }
 
 /* MODAL */
@@ -246,6 +242,9 @@ top:0;
 width:100%;
 height:100%;
 background:black;
+
+/* FIX iOS */
+touch-action:none;
 }
 
 .modal.active{
@@ -279,33 +278,15 @@ right:30px;
 color:white;
 font-size:40px;
 cursor:pointer;
-z-index:10;
 }
 
-@media(max-width:600px){
-.logo-empresa{ height:32px; }
-.title{ font-size:20px; }
-.face{ min-width:130px; height:130px; }
-.footer-buttons{ flex-direction:column; }
-}
-
-/* FIX GLOBAL iOS */
-.main-track,
-.carousel,
-.tech-grid,
-.modal{
--webkit-overflow-scrolling: touch;
-touch-action: pan-y;
-}
- 
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<img class="logo-empresa"
-src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
+<img class="logo-empresa" src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 </div>
 
 <div class="container">
@@ -315,28 +296,16 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 <!-- CARRUSEL PRINCIPAL -->
 <div class="main-carousel">
 <div class="main-track" id="mainTrack">
-
-<div class="main-slide">
-<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-1-verve.jpg">
+<div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-1-verve.jpg"></div>
+<div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-2-verve.jpg"></div>
+<div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-3-verve.jpg"></div>
 </div>
-
-<div class="main-slide">
-<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-2-verve.jpg">
-</div>
-
-<div class="main-slide">
-<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-3-verve.jpg">
-</div>
-
-</div>
-
 <div class="main-dots" id="mainDots"></div>
 </div>
 
 <!-- FICHA TECNICA -->
 <div class="tech-card">
 <div class="tech-title">Ficha Técnica</div>
-
 <div class="tech-grid">
 <div class="tech-item"><strong>Marca</strong><span>Verve</span></div>
 <div class="tech-item"><strong>Modelo</strong><span>Abu Dhabi</span></div>
@@ -353,7 +322,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 <div class="title" style="font-size:22px;">Adhesivos sugeridos</div>
 
 <div class="carousel-wrapper">
-
 <button class="nav left" onclick="scrollCarousel(-1, this)">‹</button>
 
 <div class="carousel" id="carouselAdhesivos">
@@ -363,7 +331,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 </div>
 
 <button class="nav right" onclick="scrollCarousel(1, this)">›</button>
-
 </div>
 
 </div>
@@ -375,27 +342,14 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 Sistema digital de consulta de producto • Gersa
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-<span class="modal-close" onclick="closeModal()">×</span>
-
-<button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
-
-<div class="modal-track" id="modalTrack"></div>
-
-<button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
-</div>
-
 <script>
 
 /* CARRUSEL PRINCIPAL */
-
 const track=document.getElementById("mainTrack");
 const slides=document.querySelectorAll(".main-slide");
 const dots=document.getElementById("mainDots");
 
-let index=0;
-let startX=0;
+let index=0,startX=0;
 
 slides.forEach((_,i)=>{
 let dot=document.createElement("span");
@@ -404,110 +358,29 @@ if(i===0) dot.classList.add("active");
 dots.appendChild(dot);
 });
 
-track.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
-});
-
+track.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
 track.addEventListener("touchend",e=>{
 let endX=e.changedTouches[0].clientX;
-
 if(startX-endX>50 && index<slides.length-1) index++;
 if(endX-startX>50 && index>0) index--;
-
 track.style.transform=`translateX(-${index*100}%)`;
-
 document.querySelectorAll(".main-dot").forEach((dot,i)=>{
 dot.classList.toggle("active",i===index);
 });
 });
 
-/* SCROLL CARRUSEL (MEJORADO) */
+/* SCROLL ADHESIVOS */
 function scrollCarousel(dir, btn){
 const carousel=btn.parentElement.querySelector(".carousel");
-carousel.scrollBy({
-left:dir*200,
-behavior:"smooth"
-});
+carousel.scrollBy({left:dir*200,behavior:"smooth"});
 }
-
-/* MODAL */
-
-const modal=document.getElementById("modal");
-const modalTrack=document.getElementById("modalTrack");
-
-let modalIndex=0;
-let modalImages=[];
-let startXModal=0;
-
-document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach(img=>{
-
-img.addEventListener("click",()=>{
-
-modalImages=Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-
-modalTrack.innerHTML="";
-
-modalImages.forEach(el=>{
-let slide=document.createElement("div");
-slide.className="modal-slide";
-
-let image=document.createElement("img");
-image.src=el.src;
-
-slide.appendChild(image);
-modalTrack.appendChild(slide);
-});
-
-modalIndex=modalImages.indexOf(img);
-
-updateModal();
-modal.classList.add("active");
-
-});
-});
-
-function moveModal(dir){
-modalIndex+=dir;
-if(modalIndex<0) modalIndex=0;
-if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
-updateModal();
-}
-
-function updateModal(){
-modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
-}
-
-function closeModal(){
-modal.classList.remove("active");
-}
-
-/* SWIPE MODAL */
-
-modal.addEventListener("touchstart",e=>{
-startXModal=e.touches[0].clientX;
-});
-
-modal.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-if(startXModal-endX>50) moveModal(1);
-if(endX-startXModal>50) moveModal(-1);
-});
 
 /* WHATSAPP */
-
-const shareBtn=document.getElementById("shareWhatsApp");
-
-shareBtn.addEventListener("click",function(){
-
+document.getElementById("shareWhatsApp").onclick=function(){
 let url=window.location.href;
-
 let mensaje="*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n"+url;
-
-let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
-
-window.open(whatsappURL,"_blank");
-
-});
+window.open("https://wa.me/?text="+encodeURIComponent(mensaje),"_blank");
+};
 
 </script>
 
