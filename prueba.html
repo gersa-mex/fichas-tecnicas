@@ -88,10 +88,13 @@ touch-action: pan-y;
 .main-track{
 display:flex;
 transition:transform .4s ease;
+will-change: transform;
+touch-action: pan-y;
 }
 
 .main-slide{
 min-width:100%;
+flex-shrink:0;
 cursor:pointer;
 }
 
@@ -454,6 +457,8 @@ startX = e.clientX;
 currentX = startX;
 isDragging = true;
 
+track.style.transition = "none"; // 👈 CLAVE
+
 track.setPointerCapture(e.pointerId);
 });
 
@@ -478,7 +483,9 @@ index--;
 
 index = Math.max(0, Math.min(index, slides.length - 1));
 
-track.style.transform = `translateX(-${index * 100}%)`;
+track.style.transition = "transform .4s ease";
+
+track.style.transform = `translate3d(-${index * 100}%,0,0)`;
 
 document.querySelectorAll(".main-dot").forEach((dot,i)=>{
 dot.classList.toggle("active", i === index);
@@ -487,6 +494,13 @@ dot.classList.toggle("active", i === index);
 isDragging = false;
 
 track.releasePointerCapture(e.pointerId);
+});
+
+
+// 👇👇👇 AQUÍ LOS AGREGAS 👇👇👇
+
+track.addEventListener("pointerleave", () => {
+isDragging = false;
 });
 
 track.addEventListener("pointercancel", () => {
