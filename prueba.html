@@ -360,8 +360,8 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 </div>
 
 <!-- CARRUSEL CARAS -->
-
-<div class="carousel-wrapper">
+<!--
+ <div class="carousel-wrapper">
 
 <button class="nav left" onclick="scrollCarousel(-1)">‹</button>
 
@@ -374,7 +374,7 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 
 
 </div>
-
+-->
 <button class="nav right" onclick="scrollCarousel(1)">›</button>
 
 </div>
@@ -497,7 +497,6 @@ track.releasePointerCapture(e.pointerId);
 });
 
 
-// 👇👇👇 AQUÍ LOS AGREGAS 👇👇👇
 
 track.addEventListener("pointerleave", () => {
 isDragging = false;
@@ -510,14 +509,14 @@ isDragging = false;
 
 /* SCROLL CARRUSEL */
 
-function scrollCarousel(dir){
+/*function scrollCarousel(dir){
 const carousel=document.querySelector(".carousel");
 carousel.scrollBy({
 left:dir*200,
 behavior:"smooth"
 });
 }
-
+*/
 
 /* MODAL */
 
