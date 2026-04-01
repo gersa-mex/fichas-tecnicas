@@ -65,7 +65,7 @@ overflow:hidden;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
 margin-bottom:22px;
 position:relative;
-/* FIX PARA IOS: Evita que el sistema bloquee el toque horizontal */
+/* Importante para que iOS no interfiera con el gesto horizontal */
 touch-action: pan-y;
 }
 
@@ -82,8 +82,9 @@ cursor:pointer;
 .main-slide img{
 width:100%;
 display:block;
-/* FIX PARA IOS: Evita que el navegador intente arrastrar la imagen */
+/* Evita que iOS intente arrastrar la imagen como archivo */
 -webkit-user-drag: none;
+user-select: none;
 }
 
 .main-dots{
@@ -288,8 +289,7 @@ z-index:10;
 <body>
 
 <div class="header">
-<img class="logo-empresa"
-src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
+<img class="logo-empresa" src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 </div>
 
 <div class="container">
@@ -368,7 +368,7 @@ Sistema digital de consulta de producto • Gersa
 
 <script>
 
-/* CARRUSEL PRINCIPAL - OPTIMIZADO PARA IOS SIN PERDER CLIC */
+/* CARRUSEL PRINCIPAL - CORRECCIÓN DEFINITIVA IOS */
 
 const track=document.getElementById("mainTrack");
 const slides=document.querySelectorAll(".main-slide");
@@ -376,49 +376,51 @@ const dots=document.getElementById("mainDots");
 
 let index=0;
 let startX=0;
-let startTime=0;
 
+// Generar puntos
 slides.forEach((_,i)=>{
-let dot=document.createElement("span");
-dot.classList.add("main-dot");
-if(i===0) dot.classList.add("active");
-dots.appendChild(dot);
+    let dot=document.createElement("span");
+    dot.classList.add("main-dot");
+    if(i===0) dot.classList.add("active");
+    dots.appendChild(dot);
 });
 
-track.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
-startTime=new Date().getTime(); // Registramos el tiempo para distinguir entre toque y deslizamiento
+track.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
 }, {passive: true});
 
-track.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-let endTime=new Date().getTime();
-let diffX = startX - endX;
-let timeDiff = endTime - startTime;
+track.addEventListener("touchend", e => {
+    let endX = e.changedTouches[0].clientX;
+    let diffX = startX - endX;
 
-// Si el movimiento horizontal es mayor a 50px, es un deslizamiento
-if(Math.abs(diffX) > 50){
-    if(diffX > 0 && index < slides.length - 1) index++;
-    if(diffX < 0 && index > 0) index--;
+    // Si el deslizamiento es mayor a 50px (hacia la izquierda), avanzamos
+    if (diffX > 50 && index < slides.length - 1) {
+        index++;
+    } 
+    // Si el deslizamiento es menor a -50px (hacia la derecha), retrocedemos
+    else if (diffX < -50 && index > 0) {
+        index--;
+    }
 
-    track.style.transform=`translateX(-${index*100}%)`;
+    // Aplicamos la transformación
+    track.style.transform = `translateX(-${index * 100}%)`;
 
-    document.querySelectorAll(".main-dot").forEach((dot,i)=>{
-    dot.classList.toggle("active",i===index);
+    // Actualizamos los dots
+    document.querySelectorAll(".main-dot").forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+    });
+}, {passive: true});
+
+/* SCROLL CARRUSEL ADHESIVOS */
+function scrollCarousel(dir, btn){
+    const carousel=btn.parentElement.querySelector(".carousel");
+    carousel.scrollBy({
+        left:dir*200,
+        behavior:"smooth"
     });
 }
-}, {passive: true});
 
-/* SCROLL CARRUSEL (MEJORADO) */
-function scrollCarousel(dir, btn){
-const carousel=btn.parentElement.querySelector(".carousel");
-carousel.scrollBy({
-left:dir*200,
-behavior:"smooth"
-});
-}
-
-/* MODAL - MANTENIENDO TU LÓGICA DE CLIC */
+/* MODAL - FUNCIONALIDAD MANTENIDA */
 
 const modal=document.getElementById("modal");
 const modalTrack=document.getElementById("modalTrack");
@@ -429,60 +431,58 @@ let startXModal=0;
 
 document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach(img=>{
 
-img.addEventListener("click",()=>{
-modalImages=Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-modalTrack.innerHTML="";
-modalImages.forEach(el=>{
-let slide=document.createElement("div");
-slide.className="modal-slide";
-let image=document.createElement("img");
-image.src=el.src;
-slide.appendChild(image);
-modalTrack.appendChild(slide);
-});
-modalIndex=modalImages.indexOf(img);
-updateModal();
-modal.classList.add("active");
-});
+    img.addEventListener("click",()=>{
+        modalImages=Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+        modalTrack.innerHTML="";
+        modalImages.forEach(el=>{
+            let slide=document.createElement("div");
+            slide.className="modal-slide";
+            let image=document.createElement("img");
+            image.src=el.src;
+            slide.appendChild(image);
+            modalTrack.appendChild(slide);
+        });
+        modalIndex=modalImages.indexOf(img);
+        updateModal();
+        modal.classList.add("active");
+    });
 });
 
 function moveModal(dir){
-modalIndex+=dir;
-if(modalIndex<0) modalIndex=0;
-if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
-updateModal();
+    modalIndex+=dir;
+    if(modalIndex<0) modalIndex=0;
+    if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
+    updateModal();
 }
 
 function updateModal(){
-modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
+    modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
 }
 
 function closeModal(){
-modal.classList.remove("active");
+    modal.classList.remove("active");
 }
 
 /* SWIPE MODAL */
-
 modal.addEventListener("touchstart",e=>{
-startXModal=e.touches[0].clientX;
-});
+    startXModal=e.touches[0].clientX;
+}, {passive: true});
 
 modal.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-if(startXModal-endX>50) moveModal(1);
-if(endX-startXModal>50) moveModal(-1);
-});
+    let endX=e.changedTouches[0].clientX;
+    let diffX = startXModal - endX;
+    if(diffX > 50) moveModal(1);
+    if(diffX < -50) moveModal(-1);
+}, {passive: true});
 
-/* WHATSAPP - MANTENIENDO TU FORMATO ORIGINAL */
-
+/* WHATSAPP - MANTENIENDO FORMATO */
 const shareBtn=document.getElementById("shareWhatsApp");
-
 shareBtn.addEventListener("click",function(e){
-e.preventDefault(); // Evita que la página recargue al hacer clic
-let url=window.location.href;
-let mensaje="*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n"+url;
-let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
-window.open(whatsappURL,"_blank");
+    e.preventDefault();
+    let url=window.location.href;
+    let mensaje="*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n"+url;
+    let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
+    window.open(whatsappURL,"_blank");
 });
 
 </script>
