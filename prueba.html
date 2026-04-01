@@ -6,7 +6,6 @@
 
 <title>ABU DHABI</title>
 
-<!-- PREVIEW PARA WHATSAPP -->
 <meta property="og:title" content="ABU DHABI | Loseta 55x55">
 <meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
 <meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-logo-verve.jpg">
@@ -58,7 +57,7 @@ color:var(--azul);
 margin-bottom:16px;
 }
 
-/* ===== CARRUSEL PRINCIPAL ===== */
+/* ===== CARRUSEL PRINCIPAL (CON FIX PARA IOS) ===== */
 
 .main-carousel{
 border-radius:16px;
@@ -66,6 +65,7 @@ overflow:hidden;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
 margin-bottom:22px;
 position:relative;
+touch-action: pan-y; /* Permite scroll vertical pero reserva el horizontal para el JS */
 }
 
 .main-track{
@@ -103,7 +103,7 @@ display:inline-block;
 background:white;
 }
 
-/* ===== CARRUSEL ===== */
+/* ===== CARRUSEL ADHESIVOS ===== */
 
 .carousel-wrapper{
 position:relative;
@@ -285,15 +285,13 @@ z-index:10;
 <body>
 
 <div class="header">
-<img class="logo-empresa"
-src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
+<img class="logo-empresa" src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh" alt="GERSA">
 </div>
 
 <div class="container">
 
 <div class="title">ABU DHABI BEIGE</div>
 
-<!-- CARRUSEL PRINCIPAL -->
 <div class="main-carousel">
 <div class="main-track" id="mainTrack">
 
@@ -314,7 +312,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 <div class="main-dots" id="mainDots"></div>
 </div>
 
-<!-- FICHA TECNICA -->
 <div class="tech-card">
 <div class="tech-title">Ficha Técnica</div>
 
@@ -330,7 +327,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 </div>
 </div>
 
-<!-- ADHESIVOS -->
 <div class="title" style="font-size:22px;">Adhesivos sugeridos</div>
 
 <div class="carousel-wrapper">
@@ -356,7 +352,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 Sistema digital de consulta de producto • Gersa
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
 <span class="modal-close" onclick="closeModal()">×</span>
 
@@ -369,125 +364,131 @@ Sistema digital de consulta de producto • Gersa
 
 <script>
 
-/* CARRUSEL PRINCIPAL */
+/* CARRUSEL PRINCIPAL OPTIMIZADO PARA IOS */
 
-const track=document.getElementById("mainTrack");
-const slides=document.querySelectorAll(".main-slide");
-const dots=document.getElementById("mainDots");
+const track = document.getElementById("mainTrack");
+const slides = document.querySelectorAll(".main-slide");
+const dotsContainer = document.getElementById("mainDots");
 
-let index=0;
-let startX=0;
+let index = 0;
+let startX = 0;
+let isMoving = false;
 
-slides.forEach((_,i)=>{
-let dot=document.createElement("span");
-dot.classList.add("main-dot");
-if(i===0) dot.classList.add("active");
-dots.appendChild(dot);
+// Generar puntos dinámicamente
+slides.forEach((_, i) => {
+    let dot = document.createElement("span");
+    dot.classList.add("main-dot");
+    if (i === 0) dot.classList.add("active");
+    dotsContainer.appendChild(dot);
 });
 
-track.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
+track.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+    isMoving = true;
+}, { passive: true });
+
+track.addEventListener("touchmove", e => {
+    if (!isMoving) return;
+}, { passive: true });
+
+track.addEventListener("touchend", e => {
+    if (!isMoving) return;
+    let endX = e.changedTouches[0].clientX;
+    let diffX = startX - endX;
+
+    // Umbral de 50px para validar el deslizamiento
+    if (Math.abs(diffX) > 50) {
+        if (diffX > 0 && index < slides.length - 1) {
+            index++;
+        } else if (diffX < 0 && index > 0) {
+            index--;
+        }
+    }
+
+    updateCarousel();
+    isMoving = false;
 });
 
-track.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-
-if(startX-endX>50 && index<slides.length-1) index++;
-if(endX-startX>50 && index>0) index--;
-
-track.style.transform=`translateX(-${index*100}%)`;
-
-document.querySelectorAll(".main-dot").forEach((dot,i)=>{
-dot.classList.toggle("active",i===index);
-});
-});
-
-/* SCROLL CARRUSEL (MEJORADO) */
-function scrollCarousel(dir, btn){
-const carousel=btn.parentElement.querySelector(".carousel");
-carousel.scrollBy({
-left:dir*200,
-behavior:"smooth"
-});
+function updateCarousel() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    const allDots = document.querySelectorAll(".main-dot");
+    allDots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+    });
 }
 
-/* MODAL */
+/* SCROLL CARRUSEL (ADHESIVOS) */
+function scrollCarousel(dir, btn){
+    const carousel = btn.parentElement.querySelector(".carousel");
+    carousel.scrollBy({
+        left: dir * 200,
+        behavior: "smooth"
+    });
+}
 
-const modal=document.getElementById("modal");
-const modalTrack=document.getElementById("modalTrack");
+/* MODAL Y VISUALIZADOR DE IMÁGENES */
 
-let modalIndex=0;
-let modalImages=[];
-let startXModal=0;
+const modal = document.getElementById("modal");
+const modalTrack = document.getElementById("modalTrack");
 
-document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach(img=>{
+let modalIndex = 0;
+let modalImages = [];
+let startXModal = 0;
 
-img.addEventListener("click",()=>{
+document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach(img => {
+    img.addEventListener("click", () => {
+        modalImages = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+        modalTrack.innerHTML = "";
 
-modalImages=Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+        modalImages.forEach(el => {
+            let slide = document.createElement("div");
+            slide.className = "modal-slide";
+            let image = document.createElement("img");
+            image.src = el.src;
+            slide.appendChild(image);
+            modalTrack.appendChild(slide);
+        });
 
-modalTrack.innerHTML="";
-
-modalImages.forEach(el=>{
-let slide=document.createElement("div");
-slide.className="modal-slide";
-
-let image=document.createElement("img");
-image.src=el.src;
-
-slide.appendChild(image);
-modalTrack.appendChild(slide);
-});
-
-modalIndex=modalImages.indexOf(img);
-
-updateModal();
-modal.classList.add("active");
-
-});
+        modalIndex = modalImages.indexOf(img);
+        updateModal();
+        modal.classList.add("active");
+    });
 });
 
 function moveModal(dir){
-modalIndex+=dir;
-if(modalIndex<0) modalIndex=0;
-if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
-updateModal();
+    modalIndex += dir;
+    if(modalIndex < 0) modalIndex = 0;
+    if(modalIndex >= modalImages.length) modalIndex = modalImages.length - 1;
+    updateModal();
 }
 
 function updateModal(){
-modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
+    modalTrack.style.transform = `translateX(-${modalIndex * 100}%)`;
 }
 
 function closeModal(){
-modal.classList.remove("active");
+    modal.classList.remove("active");
 }
 
 /* SWIPE MODAL */
-
-modal.addEventListener("touchstart",e=>{
-startXModal=e.touches[0].clientX;
+modal.addEventListener("touchstart", e => {
+    startXModal = e.touches[0].clientX;
 });
 
-modal.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-if(startXModal-endX>50) moveModal(1);
-if(endX-startXModal>50) moveModal(-1);
+modal.addEventListener("touchend", e => {
+    let endX = e.changedTouches[0].clientX;
+    if(startXModal - endX > 50) moveModal(1);
+    if(endX - startXModal > 50) moveModal(-1);
 });
 
 /* WHATSAPP */
-
-const shareBtn=document.getElementById("shareWhatsApp");
-
-shareBtn.addEventListener("click",function(){
-
-let url=window.location.href;
-
-let mensaje="*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n"+url;
-
-let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
-
-window.open(whatsappURL,"_blank");
-
+const shareBtn = document.getElementById("shareWhatsApp");
+shareBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    let url = window.location.href;
+    let mensaje = "*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n" + url;
+    let whatsappURL = "https://wa.me/?text=" + encodeURIComponent(mensaje);
+    window.open(whatsappURL, "_blank");
 });
 
 </script>
