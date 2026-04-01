@@ -6,7 +6,6 @@
 
 <title>ABU DHABI</title>
 
-<!-- PREVIEW PARA WHATSAPP -->
 <meta property="og:title" content="ABU DHABI | Loseta 55x55">
 <meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
 <meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-logo-verve.jpg">
@@ -66,6 +65,8 @@ overflow:hidden;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
 margin-bottom:22px;
 position:relative;
+/* FIX PARA IOS: Evita que el sistema bloquee el toque horizontal */
+touch-action: pan-y;
 }
 
 .main-track{
@@ -81,6 +82,8 @@ cursor:pointer;
 .main-slide img{
 width:100%;
 display:block;
+/* FIX PARA IOS: Evita que el navegador intente arrastrar la imagen */
+-webkit-user-drag: none;
 }
 
 .main-dots{
@@ -103,7 +106,7 @@ display:inline-block;
 background:white;
 }
 
-/* ===== CARRUSEL ===== */
+/* ===== CARRUSEL ADHESIVOS ===== */
 
 .carousel-wrapper{
 position:relative;
@@ -293,7 +296,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 
 <div class="title">ABU DHABI BEIGE</div>
 
-<!-- CARRUSEL PRINCIPAL -->
 <div class="main-carousel">
 <div class="main-track" id="mainTrack">
 
@@ -314,7 +316,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 <div class="main-dots" id="mainDots"></div>
 </div>
 
-<!-- FICHA TECNICA -->
 <div class="tech-card">
 <div class="tech-title">Ficha Técnica</div>
 
@@ -330,7 +331,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 </div>
 </div>
 
-<!-- ADHESIVOS -->
 <div class="title" style="font-size:22px;">Adhesivos sugeridos</div>
 
 <div class="carousel-wrapper">
@@ -356,7 +356,6 @@ src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
 Sistema digital de consulta de producto • Gersa
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
 <span class="modal-close" onclick="closeModal()">×</span>
 
@@ -369,7 +368,7 @@ Sistema digital de consulta de producto • Gersa
 
 <script>
 
-/* CARRUSEL PRINCIPAL */
+/* CARRUSEL PRINCIPAL - OPTIMIZADO PARA IOS SIN PERDER CLIC */
 
 const track=document.getElementById("mainTrack");
 const slides=document.querySelectorAll(".main-slide");
@@ -377,6 +376,7 @@ const dots=document.getElementById("mainDots");
 
 let index=0;
 let startX=0;
+let startTime=0;
 
 slides.forEach((_,i)=>{
 let dot=document.createElement("span");
@@ -387,20 +387,27 @@ dots.appendChild(dot);
 
 track.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX;
-});
+startTime=new Date().getTime(); // Registramos el tiempo para distinguir entre toque y deslizamiento
+}, {passive: true});
 
 track.addEventListener("touchend",e=>{
 let endX=e.changedTouches[0].clientX;
+let endTime=new Date().getTime();
+let diffX = startX - endX;
+let timeDiff = endTime - startTime;
 
-if(startX-endX>50 && index<slides.length-1) index++;
-if(endX-startX>50 && index>0) index--;
+// Si el movimiento horizontal es mayor a 50px, es un deslizamiento
+if(Math.abs(diffX) > 50){
+    if(diffX > 0 && index < slides.length - 1) index++;
+    if(diffX < 0 && index > 0) index--;
 
-track.style.transform=`translateX(-${index*100}%)`;
+    track.style.transform=`translateX(-${index*100}%)`;
 
-document.querySelectorAll(".main-dot").forEach((dot,i)=>{
-dot.classList.toggle("active",i===index);
-});
-});
+    document.querySelectorAll(".main-dot").forEach((dot,i)=>{
+    dot.classList.toggle("active",i===index);
+    });
+}
+}, {passive: true});
 
 /* SCROLL CARRUSEL (MEJORADO) */
 function scrollCarousel(dir, btn){
@@ -411,7 +418,7 @@ behavior:"smooth"
 });
 }
 
-/* MODAL */
+/* MODAL - MANTENIENDO TU LÓGICA DE CLIC */
 
 const modal=document.getElementById("modal");
 const modalTrack=document.getElementById("modalTrack");
@@ -423,27 +430,19 @@ let startXModal=0;
 document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach(img=>{
 
 img.addEventListener("click",()=>{
-
 modalImages=Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-
 modalTrack.innerHTML="";
-
 modalImages.forEach(el=>{
 let slide=document.createElement("div");
 slide.className="modal-slide";
-
 let image=document.createElement("img");
 image.src=el.src;
-
 slide.appendChild(image);
 modalTrack.appendChild(slide);
 });
-
 modalIndex=modalImages.indexOf(img);
-
 updateModal();
 modal.classList.add("active");
-
 });
 });
 
@@ -474,20 +473,16 @@ if(startXModal-endX>50) moveModal(1);
 if(endX-startXModal>50) moveModal(-1);
 });
 
-/* WHATSAPP */
+/* WHATSAPP - MANTENIENDO TU FORMATO ORIGINAL */
 
 const shareBtn=document.getElementById("shareWhatsApp");
 
-shareBtn.addEventListener("click",function(){
-
+shareBtn.addEventListener("click",function(e){
+e.preventDefault(); // Evita que la página recargue al hacer clic
 let url=window.location.href;
-
 let mensaje="*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n"+url;
-
 let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
-
 window.open(whatsappURL,"_blank");
-
 });
 
 </script>
