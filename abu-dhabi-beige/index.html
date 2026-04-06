@@ -2,8 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABU DHABI | GERSA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"> <title>ABU DHABI | GERSA</title>
 
 <meta property="og:title" content="ABU DHABI | Loseta 55x55">
 <meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
@@ -56,7 +55,7 @@ body{
     margin-bottom:16px;
 }
 
-/* ===== CARRUSEL PRINCIPAL NATIVO (EL FIJO PARA iOS) ===== */
+/* ===== CARRUSEL PRINCIPAL NATIVO ===== */
 .main-carousel {
     position: relative;
     margin-bottom: 22px;
@@ -83,6 +82,8 @@ body{
     width: 100%;
     display: block;
     cursor: pointer;
+    /* Permitir zoom nativo antes de abrir modal */
+    touch-action: manipulation; 
 }
 
 .main-dots {
@@ -131,13 +132,23 @@ body{
 .footer-buttons{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
 .footer a{ background:var(--verde); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:bold; transition:0.3s; }
 
-/* ===== MODAL ===== */
-.modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; }
+/* ===== MODAL CON ZOOM ===== */
+.modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; overflow: hidden; }
 .modal.active{ display:flex; justify-content:center; align-items:center; }
 .modal-track{ display:flex; height:100%; width: 100%; transition:transform .3s ease-out; }
-.modal-slide{ min-width:100%; height: 100%; display:flex; justify-content:center; align-items:center; }
-.modal-slide img{ max-width:95%; max-height:85%; object-fit: contain; }
-.modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:100; }
+.modal-slide{ min-width:100%; height: 100%; display:flex; justify-content:center; align-items:center; overflow: auto; }
+.modal-slide img{ 
+    max-width:95%; 
+    max-height:85%; 
+    object-fit: contain; 
+    transition: transform 0.3s ease; 
+    cursor: zoom-in;
+}
+.modal-slide img.zoomed {
+    transform: scale(2); /* Zoom al doble */
+    cursor: zoom-out;
+}
+.modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:100; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
 @media(max-width:600px){
     .logo-empresa{ height:32px; }
@@ -199,13 +210,13 @@ body{
 
 <div class="modal" id="modal">
     <span class="modal-close" onclick="closeModal()">×</span>
-    <button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
+    <button class="nav left" id="modalBtnLeft" onclick="moveModal(-1)" style="left:20px;">‹</button>
     <div class="modal-track" id="modalTrack"></div>
-    <button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
+    <button class="nav right" id="modalBtnRight" onclick="moveModal(1)" style="right:20px;">›</button>
 </div>
 
 <script>
-/* === LÓGICA DOTS (MANTENIDA) === */
+/* === DOTS === */
 const track = document.getElementById("mainTrack");
 const dotsContainer = document.getElementById("mainDots");
 const slides = document.querySelectorAll(".main-slide");
@@ -223,7 +234,7 @@ track.addEventListener("scroll", () => {
     allDots.forEach((dot, i) => dot.classList.toggle("active", i === activeIndex));
 });
 
-/* === LÓGICA MODAL (CLIC + SWIPE + SCROLL FIX) === */
+/* === LÓGICA MODAL CON ZOOM === */
 const modal = document.getElementById("modal");
 const modalTrack = document.getElementById("modalTrack");
 let modalIndex = 0;
@@ -240,6 +251,15 @@ function setupModal() {
         slide.className = "modal-slide";
         let image = document.createElement("img");
         image.src = el.src;
+        
+        // Evento de doble clic/tap para zoom
+        image.addEventListener('click', function(e) {
+            // Si es un doble clic rápido
+            if (e.detail === 2) {
+                this.classList.toggle('zoomed');
+            }
+        });
+
         slide.appendChild(image);
         modalTrack.appendChild(slide);
     });
@@ -248,6 +268,7 @@ function setupModal() {
 function openModal(idx) {
     if (modalImages.length === 0) setupModal();
     modalIndex = idx;
+    resetZooms();
     updateModal();
     modal.classList.add("active");
 }
@@ -260,12 +281,20 @@ function moveModal(dir){
     modalIndex += dir;
     if(modalIndex < 0) modalIndex = 0;
     if(modalIndex >= modalImages.length) modalIndex = modalImages.length - 1;
+    resetZooms();
     updateModal();
 }
 
-function closeModal(){ modal.classList.remove("active"); }
+function resetZooms() {
+    document.querySelectorAll('.modal-slide img').forEach(img => img.classList.remove('zoomed'));
+}
 
-// Discriminador de Scroll vs Clic para iOS/Android
+function closeModal(){ 
+    resetZooms();
+    modal.classList.remove("active"); 
+}
+
+// Discriminador Scroll vs Clic
 document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) => {
     img.addEventListener('touchstart', () => { isScrolling = false; }, {passive: true});
     img.addEventListener('touchmove', () => { isScrolling = true; }, {passive: true});
@@ -276,7 +305,6 @@ document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) =
         }
     });
     img.addEventListener('click', (e) => {
-        // En PC el touch no existe, así que el clic siempre funciona
         if (e.pointerType === 'mouse' || !('ontouchstart' in window)) {
             const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
             openModal(currentImgs.indexOf(img));
@@ -284,10 +312,17 @@ document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) =
     });
 });
 
-/* SWIPE DENTRO DEL MODAL */
-modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+/* SWIPE MODAL (Solo funciona si NO hay zoom) */
+modal.addEventListener('touchstart', e => { 
+    touchStartX = e.changedTouches[0].screenX; 
+}, {passive: true});
+
 modal.addEventListener('touchend', e => {
     let touchEndX = e.changedTouches[0].screenX;
+    // Si la imagen actual tiene zoom, permitimos el scroll interno, no el cambio de slide
+    const currentImg = modalTrack.querySelectorAll('img')[modalIndex];
+    if (currentImg && currentImg.classList.contains('zoomed')) return;
+
     if (touchStartX - touchEndX > 50) moveModal(1);
     if (touchEndX - touchStartX > 50) moveModal(-1);
 }, {passive: true});
