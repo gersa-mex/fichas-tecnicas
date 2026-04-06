@@ -3,28 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABU DHABI</title>
-
-<meta property="og:title" content="ABU DHABI | Loseta 55x55">
-<meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
-<meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-logo-verve.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:type" content="website">
-<meta property="og:url" content="ht<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ABU DHABI | GERSA</title>
 
-<meta property="og:title" content="ABU DHABI | Loseta 55x55">
-<meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
-<meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-logo-verve.jpg">
-<meta property="og:type" content="website">
-
 <style>
-/* --- ESTILOS BASE (MANTENIDOS DEL CÓDIGO 1) --- */
 :root{
     --verde:#33cc00;
     --azul:#283876;
@@ -65,7 +46,7 @@ body{
     margin-bottom:16px;
 }
 
-/* ===== CARRUSEL PRINCIPAL NATIVO (EL FAVORITO DE iOS) ===== */
+/* ===== CARRUSEL PRINCIPAL NATIVO (EL QUE TE GUSTA DE iOS) ===== */
 .main-carousel {
     position: relative;
     margin-bottom: 22px;
@@ -92,7 +73,6 @@ body{
     width: 100%;
     display: block;
     cursor: pointer;
-    touch-action: pan-y; /* Permite scroll vertical pero detecta el tap */
 }
 
 .main-dots {
@@ -136,8 +116,8 @@ body{
 .tech-item strong{ display:block; font-size:13px; color:#6b7280; }
 .tech-item span{ font-weight:bold; font-size:15px; }
 
-/* ===== MODAL OPTIMIZADO PARA DESLIZAR ===== */
-.modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; touch-action: none; /* Bloquea el scroll del fondo al usar el modal */ }
+/* ===== MODAL ===== */
+.modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; }
 .modal.active{ display:flex; justify-content:center; align-items:center; }
 .modal-track{ display:flex; height:100%; width: 100%; transition:transform .3s ease-out; }
 .modal-slide{ min-width:100%; height: 100%; display:flex; justify-content:center; align-items:center; }
@@ -149,7 +129,6 @@ body{
 
 @media(max-width:600px){
     .logo-empresa{ height:32px; }
-    .face{ min-width:130px; height:130px; }
 }
 </style>
 </head>
@@ -207,7 +186,7 @@ body{
 </div>
 
 <script>
-/* === DOTS DEL CARRUSEL NATIVO === */
+/* === DOTS DEL CARRUSEL NATIVO (EL QUE FUNCIONA EN iOS) === */
 const track = document.getElementById("mainTrack");
 const dotsContainer = document.getElementById("mainDots");
 const slides = document.querySelectorAll(".main-slide");
@@ -225,15 +204,15 @@ track.addEventListener("scroll", () => {
     allDots.forEach((dot, i) => dot.classList.toggle("active", i === activeIndex));
 });
 
-/* === LÓGICA DE MODAL CON SWIPE (DESLIZAR) === */
+/* === LÓGICA DE MODAL INTELIGENTE (SWIPE + CLIC) === */
 const modal = document.getElementById("modal");
 const modalTrack = document.getElementById("modalTrack");
 let modalIndex = 0;
 let modalImages = [];
 let touchStartX = 0;
-let touchEndX = 0;
+let isScrolling = false;
 
-// Cargar imágenes al modal
+// Preparar modal
 function setupModal() {
     const allImgs = document.querySelectorAll(".main-image, #carouselAdhesivos img");
     modalImages = Array.from(allImgs);
@@ -268,33 +247,36 @@ function moveModal(dir){
 
 function closeModal(){ modal.classList.remove("active"); }
 
-// Asignar clics a las imágenes originales
+/* --- FIX PARA PERMITIR SCROLL Y CLIC AL MISMO TIEMPO --- */
 document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) => {
-    img.addEventListener("click", () => {
+    // Detectamos cuando inicia el toque
+    img.addEventListener('touchstart', () => { isScrolling = false; }, {passive: true});
+    
+    // Si el dedo se mueve, es que el usuario está haciendo scroll (deslizando)
+    img.addEventListener('touchmove', () => { isScrolling = true; }, {passive: true});
+    
+    // Al soltar el dedo, solo abrimos el modal si NO hubo scroll
+    img.addEventListener('touchend', (e) => {
+        if (!isScrolling) {
+            const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+            openModal(currentImgs.indexOf(img));
+        }
+    });
+
+    // Para PC (clic de mouse)
+    img.addEventListener('click', () => {
         const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
         openModal(currentImgs.indexOf(img));
     });
 });
 
-/* --- DETECCIÓN DE SWIPE PARA EL MODAL --- */
-modal.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-}, false);
-
+/* --- SWIPE DENTRO DEL MODAL --- */
+modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
 modal.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}, false);
-
-function handleSwipe() {
-    const swipeThreshold = 50; // Sensibilidad del deslizamiento
-    if (touchEndX < touchStartX - swipeThreshold) {
-        moveModal(1); // Deslizó a la izquierda -> Siguiente
-    }
-    if (touchEndX > touchStartX + swipeThreshold) {
-        moveModal(-1); // Deslizó a la derecha -> Anterior
-    }
-}
+    let touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 50) moveModal(1);
+    if (touchEndX - touchStartX > 50) moveModal(-1);
+}, {passive: true});
 
 /* SCROLL ADHESIVOS */
 function scrollCarousel(dir, btn){
