@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABU DHABI</title>
+<title>ABU DHABI | GERSA</title>
 
-<!-- PREVIEW PARA WHATSAPP -->
 <meta property="og:title" content="ABU DHABI | Loseta 55x55">
 <meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
 <meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-logo-verve.jpg">
@@ -57,7 +56,7 @@ body{
     margin-bottom:16px;
 }
 
-/* ===== CARRUSEL PRINCIPAL NATIVO (EL FIX DEFINITIVO) ===== */
+/* ===== CARRUSEL PRINCIPAL NATIVO (EL FIJO PARA iOS) ===== */
 .main-carousel {
     position: relative;
     margin-bottom: 22px;
@@ -66,26 +65,24 @@ body{
 .main-track {
     display: flex;
     overflow-x: auto;
-    scroll-snap-type: x mandatory; /* Esto obliga a que la imagen se detenga perfecta */
+    scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Suavidad extra en iOS */
+    -webkit-overflow-scrolling: touch;
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 }
 
-.main-track::-webkit-scrollbar {
-    display: none; /* Oculta la barra de scroll */
-}
+.main-track::-webkit-scrollbar { display: none; }
 
 .main-slide {
     min-width: 100%;
-    scroll-snap-align: start; /* Alineación de la imagen */
+    scroll-snap-align: start;
 }
 
 .main-slide img {
     width: 100%;
     display: block;
-    pointer-events: none; /* Evita que el iPhone intente "arrastrar" la imagen como archivo */
+    cursor: pointer;
 }
 
 .main-dots {
@@ -111,34 +108,39 @@ body{
     transform: scale(1.3);
 }
 
-/* ===== RESTO DE ESTILOS (IGUALES) ===== */
+/* ===== ADHESIVOS ===== */
 .carousel-wrapper{ position:relative; margin-bottom:28px; }
 .carousel{ display:flex; gap:14px; overflow-x:auto; padding-bottom:10px; }
 .carousel::-webkit-scrollbar{ display:none; }
 .face{ min-width:160px; height:160px; border-radius:14px; overflow:hidden; cursor:pointer; background:white; box-shadow:0 6px 14px rgba(0,0,0,0.15); object-fit:cover; }
+
 .nav{ position:absolute; top:40%; background:var(--verde); color:white; border:none; font-size:22px; cursor:pointer; padding:10px 15px; border-radius:50%; z-index:10; }
 .nav.left{ left:-8px; }
 .nav.right{ right:-8px; }
+
+/* ===== FICHA TÉCNICA ===== */
 .tech-card{ background:var(--card); border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,0,0,0.12); border-top:6px solid var(--verde); margin-bottom:30px; }
 .tech-title{ font-size:20px; font-weight:bold; color:var(--azul); margin-bottom:14px; }
 .tech-grid{ display:flex; gap:12px; overflow-x:auto; }
 .tech-item{ min-width:180px; background:#f8fafc; padding:12px 16px; border-radius:10px; border-left:5px solid var(--verde); }
 .tech-item strong{ display:block; font-size:13px; color:#6b7280; }
 .tech-item span{ font-weight:bold; font-size:15px; }
+
+/* ===== FOOTER ===== */
 .footer{ background:var(--azul); color:white; padding:25px 15px; margin-top:40px; text-align:center; }
 .footer-buttons{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
 .footer a{ background:var(--verde); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:bold; transition:0.3s; }
+
+/* ===== MODAL ===== */
 .modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; }
 .modal.active{ display:flex; justify-content:center; align-items:center; }
-.modal-track{ display:flex; height:100%; transition:transform .4s ease; }
-.modal-slide{ min-width:100%; display:flex; justify-content:center; align-items:center; }
-.modal-slide img{ max-width:95%; max-height:90%; }
-.modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:10; }
+.modal-track{ display:flex; height:100%; width: 100%; transition:transform .3s ease-out; }
+.modal-slide{ min-width:100%; height: 100%; display:flex; justify-content:center; align-items:center; }
+.modal-slide img{ max-width:95%; max-height:85%; object-fit: contain; }
+.modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:100; }
 
 @media(max-width:600px){
     .logo-empresa{ height:32px; }
-    .title{ font-size:20px; }
-    .face{ min-width:130px; height:130px; }
     .footer-buttons{ flex-direction:column; }
 }
 </style>
@@ -155,9 +157,9 @@ body{
 
     <div class="main-carousel">
         <div class="main-track" id="mainTrack">
-            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-1-verve.jpg" onclick="openModal(0)"></div>
-            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-2-verve.jpg" onclick="openModal(1)"></div>
-            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-3-verve.jpg" onclick="openModal(2)"></div>
+            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-1-verve.jpg"></div>
+            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-2-verve.jpg"></div>
+            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-3-verve.jpg"></div>
         </div>
         <div class="main-dots" id="mainDots"></div>
     </div>
@@ -180,9 +182,9 @@ body{
     <div class="carousel-wrapper">
         <button class="nav left" onclick="scrollCarousel(-1, this)">‹</button>
         <div class="carousel" id="carouselAdhesivos">
-            <img class="face" src="https://lh3.googleusercontent.com/d/19THsR8e0TvH4ACQKTooO08Ai69_g0DEG" onclick="openModalFromCarousel(this)">
-            <img class="face" src="https://lh3.googleusercontent.com/d/1pFIu3l-uMC5N3tK4ZxVutVHLtr9JXMj2" onclick="openModalFromCarousel(this)">
-            <img class="face" src="https://lh3.googleusercontent.com/d/1SIS77RI3txH9oQ5Wpy78sJDwxi3dTC3F" onclick="openModalFromCarousel(this)">
+            <img class="face" src="https://lh3.googleusercontent.com/d/19THsR8e0TvH4ACQKTooO08Ai69_g0DEG">
+            <img class="face" src="https://lh3.googleusercontent.com/d/1pFIu3l-uMC5N3tK4ZxVutVHLtr9JXMj2">
+            <img class="face" src="https://lh3.googleusercontent.com/d/1SIS77RI3txH9oQ5Wpy78sJDwxi3dTC3F">
         </div>
         <button class="nav right" onclick="scrollCarousel(1, this)">›</button>
     </div>
@@ -203,7 +205,7 @@ body{
 </div>
 
 <script>
-/* LÓGICA DE DOTS SIN INTERFERIR CON EL SCROLL NATIVO */
+/* === LÓGICA DOTS (MANTENIDA) === */
 const track = document.getElementById("mainTrack");
 const dotsContainer = document.getElementById("mainDots");
 const slides = document.querySelectorAll(".main-slide");
@@ -216,37 +218,18 @@ slides.forEach((_, i) => {
 });
 
 const allDots = document.querySelectorAll(".main-dot");
-
 track.addEventListener("scroll", () => {
-    const scrollPosition = track.scrollLeft;
-    const slideWidth = track.offsetWidth;
-    const activeIndex = Math.round(scrollPosition / slideWidth);
-    
-    allDots.forEach((dot, i) => {
-        dot.classList.toggle("active", i === activeIndex);
-    });
+    const activeIndex = Math.round(track.scrollLeft / track.offsetWidth);
+    allDots.forEach((dot, i) => dot.classList.toggle("active", i === activeIndex));
 });
 
-/* FUNCIONES DE MODAL */
+/* === LÓGICA MODAL (CLIC + SWIPE + SCROLL FIX) === */
 const modal = document.getElementById("modal");
 const modalTrack = document.getElementById("modalTrack");
 let modalIndex = 0;
 let modalImages = [];
-
-function openModal(idx) {
-    setupModal();
-    modalIndex = idx;
-    updateModal();
-    modal.classList.add("active");
-}
-
-function openModalFromCarousel(img) {
-    setupModal();
-    const allImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-    modalIndex = allImgs.indexOf(img);
-    updateModal();
-    modal.classList.add("active");
-}
+let touchStartX = 0;
+let isScrolling = false;
 
 function setupModal() {
     const allImgs = document.querySelectorAll(".main-image, #carouselAdhesivos img");
@@ -262,6 +245,17 @@ function setupModal() {
     });
 }
 
+function openModal(idx) {
+    if (modalImages.length === 0) setupModal();
+    modalIndex = idx;
+    updateModal();
+    modal.classList.add("active");
+}
+
+function updateModal(){
+    modalTrack.style.transform = `translateX(-${modalIndex * 100}%)`;
+}
+
 function moveModal(dir){
     modalIndex += dir;
     if(modalIndex < 0) modalIndex = 0;
@@ -269,16 +263,38 @@ function moveModal(dir){
     updateModal();
 }
 
-function updateModal(){
-    modalTrack.style.transform = `translateX(-${modalIndex * 100}%)`;
-}
-
 function closeModal(){ modal.classList.remove("active"); }
+
+// Discriminador de Scroll vs Clic para iOS/Android
+document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) => {
+    img.addEventListener('touchstart', () => { isScrolling = false; }, {passive: true});
+    img.addEventListener('touchmove', () => { isScrolling = true; }, {passive: true});
+    img.addEventListener('touchend', () => {
+        if (!isScrolling) {
+            const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+            openModal(currentImgs.indexOf(img));
+        }
+    });
+    img.addEventListener('click', (e) => {
+        // En PC el touch no existe, así que el clic siempre funciona
+        if (e.pointerType === 'mouse' || !('ontouchstart' in window)) {
+            const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+            openModal(currentImgs.indexOf(img));
+        }
+    });
+});
+
+/* SWIPE DENTRO DEL MODAL */
+modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+modal.addEventListener('touchend', e => {
+    let touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 50) moveModal(1);
+    if (touchEndX - touchStartX > 50) moveModal(-1);
+}, {passive: true});
 
 /* SCROLL ADHESIVOS */
 function scrollCarousel(dir, btn){
-    const carousel = btn.parentElement.querySelector(".carousel");
-    carousel.scrollBy({ left: dir * 200, behavior: "smooth" });
+    btn.parentElement.querySelector(".carousel").scrollBy({ left: dir * 200, behavior: "smooth" });
 }
 
 /* WHATSAPP */
