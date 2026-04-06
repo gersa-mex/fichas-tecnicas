@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>ABU DHABI</title>
 
 <meta property="og:title" content="ABU DHABI | Loseta 55x55">
@@ -17,271 +16,131 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <style>
+/* --- ESTILOS INTACTOS DEL CÓDIGO 1 (FUNCIONAN EN iOS) --- */
 :root{
---verde:#33cc00;
---azul:#283876;
---gris:#f4f7fc;
---texto:#1f2937;
---card:#ffffff;
+    --verde:#33cc00;
+    --azul:#283876;
+    --gris:#f4f7fc;
+    --texto:#1f2937;
+    --card:#ffffff;
 }
 
 body{
-margin:0;
-font-family:'Century Gothic',sans-serif;
-background:var(--gris);
-color:var(--texto);
-overflow-x:hidden;
+    margin:0;
+    font-family:'Century Gothic',sans-serif;
+    background:var(--gris);
+    color:var(--texto);
+    overflow-x:hidden;
 }
 
 .header{
-background:#283876;
-padding:10px 18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 4px 12px rgba(0,0,0,0.25);
+    background:#283876;
+    padding:10px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.25);
 }
 
 .logo-empresa{ height:42px; }
 
 .container{
-max-width:1100px;
-margin:auto;
-padding:16px;
+    max-width:1100px;
+    margin:auto;
+    padding:16px;
 }
 
 .title{
-font-size:26px;
-font-weight:bold;
-color:var(--azul);
-margin-bottom:16px;
+    font-size:26px;
+    font-weight:bold;
+    color:var(--azul);
+    margin-bottom:16px;
 }
 
-/* ===== CARRUSEL PRINCIPAL ===== */
-
-.main-carousel{
-border-radius:16px;
-overflow:hidden;
-box-shadow:0 12px 30px rgba(0,0,0,0.18);
-margin-bottom:22px;
-position:relative;
-/* Importante para que iOS no interfiera con el gesto horizontal */
-touch-action: pan-y;
+/* ===== CARRUSEL PRINCIPAL NATIVO (EL FIX DEFINITIVO PARA iOS) ===== */
+.main-carousel {
+    position: relative;
+    margin-bottom: 22px;
 }
 
-.main-track{
-display:flex;
-transition:transform .4s ease;
+.main-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* Obliga a la imagen a detenerse perfecta */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Suavidad extra en iOS */
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 }
 
-.main-slide{
-min-width:100%;
-cursor:pointer;
+.main-track::-webkit-scrollbar {
+    display: none; /* Oculta la barra de scroll */
 }
 
-.main-slide img{
-width:100%;
-display:block;
-/* Evita que iOS intente arrastrar la imagen como archivo */
--webkit-user-drag: none;
-user-select: none;
+.main-slide {
+    min-width: 100%;
+    scroll-snap-align: start; /* Alineación de la imagen */
 }
 
-.main-dots{
-position:absolute;
-bottom:10px;
-width:100%;
-text-align:center;
+.main-slide img {
+    width: 100%;
+    display: block;
+    /* pointer-events: none; <-- ELIMINADO: ESTO IMPEDÍA EL CLIC EN iOS */
+    cursor: pointer; /* Añadimos cursor de mano */
 }
 
-.main-dot{
-height:8px;
-width:8px;
-margin:4px;
-background:rgba(255,255,255,.5);
-border-radius:50%;
-display:inline-block;
+.main-dots {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
 }
 
-.main-dot.active{
-background:white;
+.main-dot {
+    height: 8px;
+    width: 8px;
+    margin: 4px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    display: inline-block;
+    transition: 0.3s;
 }
 
-/* ===== CARRUSEL ADHESIVOS ===== */
-
-.carousel-wrapper{
-position:relative;
-margin-bottom:28px;
+.main-dot.active {
+    background: white;
+    transform: scale(1.3);
 }
 
-.carousel{
-display:flex;
-gap:14px;
-overflow-x:auto;
-scroll-behavior:smooth;
-padding-bottom:10px;
-}
-
-.carousel::-webkit-scrollbar{
-display:none;
-}
-
-.face{
-min-width:160px;
-height:160px;
-border-radius:14px;
-overflow:hidden;
-cursor:pointer;
-background:white;
-box-shadow:0 6px 14px rgba(0,0,0,0.15);
-object-fit:cover;
-}
-
-/* BOTONES */
-
-.nav{
-position:absolute;
-top:40%;
-background:var(--verde);
-color:white;
-border:none;
-font-size:22px;
-cursor:pointer;
-padding:10px 15px;
-border-radius:50%;
-z-index:10;
-}
-
+/* ===== RESTO DE ESTILOS (IGUALES) ===== */
+.carousel-wrapper{ position:relative; margin-bottom:28px; }
+.carousel{ display:flex; gap:14px; overflow-x:auto; padding-bottom:10px; }
+.carousel::-webkit-scrollbar{ display:none; }
+.face{ min-width:160px; height:160px; border-radius:14px; overflow:hidden; cursor:pointer; background:white; box-shadow:0 6px 14px rgba(0,0,0,0.15); object-fit:cover; }
+.nav{ position:absolute; top:40%; background:var(--verde); color:white; border:none; font-size:22px; cursor:pointer; padding:10px 15px; border-radius:50%; z-index:10; }
 .nav.left{ left:-8px; }
 .nav.right{ right:-8px; }
-
-/* FICHA TECNICA */
-
-.tech-card{
-background:var(--card);
-border-radius:16px;
-padding:20px;
-box-shadow:0 8px 20px rgba(0,0,0,0.12);
-border-top:6px solid var(--verde);
-margin-bottom:30px;
-}
-
-.tech-title{
-font-size:20px;
-font-weight:bold;
-color:var(--azul);
-margin-bottom:14px;
-}
-
-.tech-grid{
-display:flex;
-gap:12px;
-overflow-x:auto;
-}
-
-.tech-item{
-min-width:180px;
-background:#f8fafc;
-padding:12px 16px;
-border-radius:10px;
-border-left:5px solid var(--verde);
-}
-
-.tech-item strong{
-display:block;
-font-size:13px;
-color:#6b7280;
-}
-
-.tech-item span{
-font-weight:bold;
-font-size:15px;
-}
-
-/* FOOTER */
-
-.footer{
-background:var(--azul);
-color:white;
-padding:25px 15px;
-margin-top:40px;
-text-align:center;
-}
-
-.footer-buttons{
-display:flex;
-justify-content:center;
-gap:12px;
-flex-wrap:wrap;
-margin-bottom:10px;
-}
-
-.footer a{
-background:var(--verde);
-color:white;
-padding:10px 16px;
-border-radius:10px;
-text-decoration:none;
-font-weight:bold;
-transition:0.3s;
-}
-
-.footer a:hover{
-transform:scale(1.05);
-}
-
-/* MODAL */
-
-.modal{
-display:none;
-position:fixed;
-z-index:9999;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:black;
-}
-
-.modal.active{
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.modal-track{
-display:flex;
-height:100%;
-transition:transform .4s ease;
-}
-
-.modal-slide{
-min-width:100%;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.modal-slide img{
-max-width:95%;
-max-height:90%;
-}
-
-.modal-close{
-position:absolute;
-top:20px;
-right:30px;
-color:white;
-font-size:40px;
-cursor:pointer;
-z-index:10;
-}
+.tech-card{ background:var(--card); border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,0,0,0.12); border-top:6px solid var(--verde); margin-bottom:30px; }
+.tech-title{ font-size:20px; font-weight:bold; color:var(--azul); margin-bottom:14px; }
+.tech-grid{ display:flex; gap:12px; overflow-x:auto; }
+.tech-item{ min-width:180px; background:#f8fafc; padding:12px 16px; border-radius:10px; border-left:5px solid var(--verde); }
+.tech-item strong{ display:block; font-size:13px; color:#6b7280; }
+.tech-item span{ font-weight:bold; font-size:15px; }
+.footer{ background:var(--azul); color:white; padding:25px 15px; margin-top:40px; text-align:center; }
+.footer-buttons{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+.footer a{ background:var(--verde); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:bold; transition:0.3s; }
+.modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; }
+.modal.active{ display:flex; justify-content:center; align-items:center; }
+.modal-track{ display:flex; height:100%; transition:transform .4s ease; }
+.modal-slide{ min-width:100%; display:flex; justify-content:center; align-items:center; }
+.modal-slide img{ max-width:95%; max-height:90%; }
+.modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:10; }
 
 @media(max-width:600px){
-.logo-empresa{ height:32px; }
-.title{ font-size:20px; }
-.face{ min-width:130px; height:130px; }
-.footer-buttons{ flex-direction:column; }
+    .logo-empresa{ height:32px; }
+    .title{ font-size:20px; }
+    .face{ min-width:130px; height:130px; }
+    .footer-buttons{ flex-direction:column; }
 }
 </style>
 </head>
@@ -289,202 +148,152 @@ z-index:10;
 <body>
 
 <div class="header">
-<img class="logo-empresa" src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh">
+    <img class="logo-empresa" src="https://lh3.googleusercontent.com/d/140224igVnuXYow4INIYvO2l6rdD33TWh" alt="GERSA">
 </div>
 
 <div class="container">
+    <div class="title">ABU DHABI BEIGE</div>
 
-<div class="title">ABU DHABI BEIGE</div>
+    <div class="main-carousel">
+        <div class="main-track" id="mainTrack">
+            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-1-verve.jpg"></div>
+            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-2-verve.jpg"></div>
+            <div class="main-slide"><img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-3-verve.jpg"></div>
+        </div>
+        <div class="main-dots" id="mainDots"></div>
+    </div>
 
-<div class="main-carousel">
-<div class="main-track" id="mainTrack">
+    <div class="tech-card">
+        <div class="tech-title">Ficha Técnica</div>
+        <div class="tech-grid">
+            <div class="tech-item"><strong>Marca</strong><span>Verve</span></div>
+            <div class="tech-item"><strong>Modelo</strong><span>Abu Dhabi</span></div>
+            <div class="tech-item"><strong>Color</strong><span>Beige</span></div>
+            <div class="tech-item"><strong>Formato</strong><span>55x55</span></div>
+            <div class="tech-item"><strong>Piezas por caja</strong><span>5</span></div>
+            <div class="tech-item"><strong>m2 por caja</strong><span>1.49</span></div>
+            <div class="tech-item"><strong>Uso</strong><span>Interior / cocina</span></div>
+            <div class="tech-item"><strong>Acabado</strong><span>Brillante</span></div>
+        </div>
+    </div>
 
-<div class="main-slide">
-<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-1-verve.jpg">
-</div>
-
-<div class="main-slide">
-<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-2-verve.jpg">
-</div>
-
-<div class="main-slide">
-<img class="main-image" src="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-ambiente-3-verve.jpg">
-</div>
-
-</div>
-
-<div class="main-dots" id="mainDots"></div>
-</div>
-
-<div class="tech-card">
-<div class="tech-title">Ficha Técnica</div>
-
-<div class="tech-grid">
-<div class="tech-item"><strong>Marca</strong><span>Verve</span></div>
-<div class="tech-item"><strong>Modelo</strong><span>Abu Dhabi</span></div>
-<div class="tech-item"><strong>Color</strong><span>Beige</span></div>
-<div class="tech-item"><strong>Formato</strong><span>55x55</span></div>
-<div class="tech-item"><strong>Piezas por caja</strong><span>5</span></div>
-<div class="tech-item"><strong>m2 por caja</strong><span>1.49</span></div>
-<div class="tech-item"><strong>Uso</strong><span>Interior / cocina</span></div>
-<div class="tech-item"><strong>Acabado</strong><span>Brillante</span></div>
-</div>
-</div>
-
-<div class="title" style="font-size:22px;">Adhesivos sugeridos</div>
-
-<div class="carousel-wrapper">
-
-<button class="nav left" onclick="scrollCarousel(-1, this)">‹</button>
-
-<div class="carousel" id="carouselAdhesivos">
-<img class="face" src="https://lh3.googleusercontent.com/d/19THsR8e0TvH4ACQKTooO08Ai69_g0DEG">
-<img class="face" src="https://lh3.googleusercontent.com/d/1pFIu3l-uMC5N3tK4ZxVutVHLtr9JXMj2">
-<img class="face" src="https://lh3.googleusercontent.com/d/1SIS77RI3txH9oQ5Wpy78sJDwxi3dTC3F">
-</div>
-
-<button class="nav right" onclick="scrollCarousel(1, this)">›</button>
-
-</div>
-
+    <div class="title" style="font-size:22px;">Adhesivos sugeridos</div>
+    <div class="carousel-wrapper">
+        <button class="nav left" onclick="scrollCarousel(-1, this)">‹</button>
+        <div class="carousel" id="carouselAdhesivos">
+            <img class="face" src="https://lh3.googleusercontent.com/d/19THsR8e0TvH4ACQKTooO08Ai69_g0DEG">
+            <img class="face" src="https://lh3.googleusercontent.com/d/1pFIu3l-uMC5N3tK4ZxVutVHLtr9JXMj2">
+            <img class="face" src="https://lh3.googleusercontent.com/d/1SIS77RI3txH9oQ5Wpy78sJDwxi3dTC3F">
+        </div>
+        <button class="nav right" onclick="scrollCarousel(1, this)">›</button>
+    </div>
 </div>
 
 <div class="footer">
-<div class="footer-buttons">
-<a href="#" id="shareWhatsApp">Compartir por WhatsApp</a>
-</div>
-Sistema digital de consulta de producto • Gersa
+    <div class="footer-buttons">
+        <a href="#" id="shareWhatsApp">Compartir por WhatsApp</a>
+    </div>
+    Sistema digital de consulta de producto • Gersa
 </div>
 
 <div class="modal" id="modal">
-<span class="modal-close" onclick="closeModal()">×</span>
-
-<button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
-
-<div class="modal-track" id="modalTrack"></div>
-
-<button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
+    <span class="modal-close" onclick="closeModal()">×</span>
+    <button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
+    <div class="modal-track" id="modalTrack"></div>
+    <button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
 </div>
 
 <script>
+/* === LÓGICA DE DOTS SIN INTERFERIR CON EL SCROLL NATIVO (MANTENIDO) === */
+const track = document.getElementById("mainTrack");
+const dotsContainer = document.getElementById("mainDots");
+const slides = document.querySelectorAll(".main-slide");
 
-/* CARRUSEL PRINCIPAL - CORRECCIÓN DEFINITIVA IOS */
-
-const track=document.getElementById("mainTrack");
-const slides=document.querySelectorAll(".main-slide");
-const dots=document.getElementById("mainDots");
-
-let index=0;
-let startX=0;
-
-// Generar puntos
-slides.forEach((_,i)=>{
-    let dot=document.createElement("span");
+slides.forEach((_, i) => {
+    let dot = document.createElement("span");
     dot.classList.add("main-dot");
-    if(i===0) dot.classList.add("active");
-    dots.appendChild(dot);
+    if (i === 0) dot.classList.add("active");
+    dotsContainer.appendChild(dot);
 });
 
-track.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-}, {passive: true});
+const allDots = document.querySelectorAll(".main-dot");
 
-track.addEventListener("touchend", e => {
-    let endX = e.changedTouches[0].clientX;
-    let diffX = startX - endX;
-
-    // Si el deslizamiento es mayor a 50px (hacia la izquierda), avanzamos
-    if (diffX > 50 && index < slides.length - 1) {
-        index++;
-    } 
-    // Si el deslizamiento es menor a -50px (hacia la derecha), retrocedemos
-    else if (diffX < -50 && index > 0) {
-        index--;
-    }
-
-    // Aplicamos la transformación
-    track.style.transform = `translateX(-${index * 100}%)`;
-
-    // Actualizamos los dots
-    document.querySelectorAll(".main-dot").forEach((dot, i) => {
-        dot.classList.toggle("active", i === index);
+track.addEventListener("scroll", () => {
+    const scrollPosition = track.scrollLeft;
+    const slideWidth = track.offsetWidth;
+    const activeIndex = Math.round(scrollPosition / slideWidth);
+    
+    allDots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === activeIndex);
     });
-}, {passive: true});
+});
 
-/* SCROLL CARRUSEL ADHESIVOS */
-function scrollCarousel(dir, btn){
-    const carousel=btn.parentElement.querySelector(".carousel");
-    carousel.scrollBy({
-        left:dir*200,
-        behavior:"smooth"
+/* === LÓGICA DE MODAL CORREGIDA PARA iOS Y CLICS (NUEVA) === */
+const modal = document.getElementById("modal");
+const modalTrack = document.getElementById("modalTrack");
+let modalIndex = 0;
+let modalImages = [];
+
+// 1. Preparamos el modal (agrupamos todas las imágenes una sola vez)
+function setupModal() {
+    // Seleccionamos tanto las imágenes principales como las de adhesivos
+    const allImgs = document.querySelectorAll(".main-image, #carouselAdhesivos img");
+    modalImages = Array.from(allImgs);
+    modalTrack.innerHTML = "";
+    modalImages.forEach(el => {
+        let slide = document.createElement("div");
+        slide.className = "modal-slide";
+        let image = document.createElement("img");
+        image.src = el.src; // Usamos el src de la imagen original
+        slide.appendChild(image);
+        modalTrack.appendChild(slide);
     });
 }
 
-/* MODAL - FUNCIONALIDAD MANTENIDA */
+// 2. Función para abrir el modal en un índice específico
+function openModal(idx) {
+    if (modalImages.length === 0) setupModal(); // Asegurar que esté montado
+    modalIndex = idx;
+    updateModal();
+    modal.classList.add("active");
+}
 
-const modal=document.getElementById("modal");
-const modalTrack=document.getElementById("modalTrack");
-
-let modalIndex=0;
-let modalImages=[];
-let startXModal=0;
-
-document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach(img=>{
-
-    img.addEventListener("click",()=>{
-        modalImages=Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-        modalTrack.innerHTML="";
-        modalImages.forEach(el=>{
-            let slide=document.createElement("div");
-            slide.className="modal-slide";
-            let image=document.createElement("img");
-            image.src=el.src;
-            slide.appendChild(image);
-            modalTrack.appendChild(slide);
-        });
-        modalIndex=modalImages.indexOf(img);
-        updateModal();
-        modal.classList.add("active");
+// 3. Asignamos los clics a las imágenes usando JavaScript (Mejor compatibilidad iOS)
+document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img, index) => {
+    img.addEventListener("click", () => {
+        // Obtenemos la lista actualizada en el momento del clic por seguridad
+        const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+        const realIndex = currentImgs.indexOf(img);
+        openModal(realIndex);
     });
 });
 
+// 4. Funciones de navegación del modal (Mantenidas)
 function moveModal(dir){
-    modalIndex+=dir;
-    if(modalIndex<0) modalIndex=0;
-    if(modalIndex>=modalImages.length) modalIndex=modalImages.length-1;
+    modalIndex += dir;
+    if(modalIndex < 0) modalIndex = 0;
+    if(modalIndex >= modalImages.length) modalIndex = modalImages.length - 1;
     updateModal();
 }
 
 function updateModal(){
-    modalTrack.style.transform=`translateX(-${modalIndex*100}%)`;
+    modalTrack.style.transform = `translateX(-${modalIndex * 100}%)`;
 }
 
-function closeModal(){
-    modal.classList.remove("active");
+function closeModal(){ modal.classList.remove("active"); }
+
+/* SCROLL ADHESIVOS (MANTENIDO) */
+function scrollCarousel(dir, btn){
+    const carousel = btn.parentElement.querySelector(".carousel");
+    carousel.scrollBy({ left: dir * 200, behavior: "smooth" });
 }
 
-/* SWIPE MODAL */
-modal.addEventListener("touchstart",e=>{
-    startXModal=e.touches[0].clientX;
-}, {passive: true});
-
-modal.addEventListener("touchend",e=>{
-    let endX=e.changedTouches[0].clientX;
-    let diffX = startXModal - endX;
-    if(diffX > 50) moveModal(1);
-    if(diffX < -50) moveModal(-1);
-}, {passive: true});
-
-/* WHATSAPP - MANTENIENDO FORMATO */
-const shareBtn=document.getElementById("shareWhatsApp");
-shareBtn.addEventListener("click",function(e){
+/* WHATSAPP (MANTENIDO) */
+document.getElementById("shareWhatsApp").addEventListener("click", function(e){
     e.preventDefault();
-    let url=window.location.href;
-    let mensaje="*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n"+url;
-    let whatsappURL="https://wa.me/?text="+encodeURIComponent(mensaje);
-    window.open(whatsappURL,"_blank");
+    let mensaje = "*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n" + window.location.href;
+    window.open("https://wa.me/?text=" + encodeURIComponent(mensaje), "_blank");
 });
-
 </script>
 
 </body>
