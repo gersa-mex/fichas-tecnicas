@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"> <title>ABU DHABI | GERSA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>ABU DHABI | GERSA</title>
 
 <meta property="og:title" content="ABU DHABI | Loseta 55x55">
 <meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
@@ -82,7 +83,6 @@ body{
     width: 100%;
     display: block;
     cursor: pointer;
-    /* Permitir zoom nativo antes de abrir modal */
     touch-action: manipulation; 
 }
 
@@ -132,7 +132,7 @@ body{
 .footer-buttons{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
 .footer a{ background:var(--verde); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:bold; transition:0.3s; }
 
-/* ===== MODAL CON ZOOM ===== */
+/* ===== MODAL ===== */
 .modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; overflow: hidden; }
 .modal.active{ display:flex; justify-content:center; align-items:center; }
 .modal-track{ display:flex; height:100%; width: 100%; transition:transform .3s ease-out; }
@@ -145,7 +145,7 @@ body{
     cursor: zoom-in;
 }
 .modal-slide img.zoomed {
-    transform: scale(2); /* Zoom al doble */
+    transform: scale(2);
     cursor: zoom-out;
 }
 .modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:100; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
@@ -180,11 +180,8 @@ body{
         <div class="tech-grid">
             <div class="tech-item"><strong>Marca</strong><span>Verve</span></div>
             <div class="tech-item"><strong>Modelo</strong><span>Abu Dhabi</span></div>
-            <div class="tech-item"><strong>Color</strong><span>Beige</span></div>
             <div class="tech-item"><strong>Formato</strong><span>55x55</span></div>
-            <div class="tech-item"><strong>Piezas por caja</strong><span>5</span></div>
-            <div class="tech-item"><strong>m2 por caja</strong><span>1.49</span></div>
-            <div class="tech-item"><strong>Uso</strong><span>Interior / cocina</span></div>
+            <div class="tech-item"><strong>Uso</strong><span>Interior</span></div>
             <div class="tech-item"><strong>Acabado</strong><span>Brillante</span></div>
         </div>
     </div>
@@ -210,13 +207,13 @@ body{
 
 <div class="modal" id="modal">
     <span class="modal-close" onclick="closeModal()">×</span>
-    <button class="nav left" id="modalBtnLeft" onclick="moveModal(-1)" style="left:20px;">‹</button>
+    <button class="nav left" onclick="moveModal(-1)" style="left:20px;">‹</button>
     <div class="modal-track" id="modalTrack"></div>
-    <button class="nav right" id="modalBtnRight" onclick="moveModal(1)" style="right:20px;">›</button>
+    <button class="nav right" onclick="moveModal(1)" style="right:20px;">›</button>
 </div>
 
 <script>
-/* === DOTS === */
+/* === DOTS NATIVOS === */
 const track = document.getElementById("mainTrack");
 const dotsContainer = document.getElementById("mainDots");
 const slides = document.querySelectorAll(".main-slide");
@@ -234,7 +231,7 @@ track.addEventListener("scroll", () => {
     allDots.forEach((dot, i) => dot.classList.toggle("active", i === activeIndex));
 });
 
-/* === LÓGICA MODAL CON ZOOM === */
+/* === LÓGICA MODAL POR GRUPOS INDEPENDIENTES === */
 const modal = document.getElementById("modal");
 const modalTrack = document.getElementById("modalTrack");
 let modalIndex = 0;
@@ -242,31 +239,26 @@ let modalImages = [];
 let touchStartX = 0;
 let isScrolling = false;
 
-function setupModal() {
-    const allImgs = document.querySelectorAll(".main-image, #carouselAdhesivos img");
-    modalImages = Array.from(allImgs);
+// Esta función ahora recibe el selector específico del grupo que quieres mostrar
+function setupModalGroup(selector) {
+    const groupImgs = document.querySelectorAll(selector);
+    modalImages = Array.from(groupImgs);
     modalTrack.innerHTML = "";
     modalImages.forEach(el => {
         let slide = document.createElement("div");
         slide.className = "modal-slide";
         let image = document.createElement("img");
         image.src = el.src;
-        
-        // Evento de doble clic/tap para zoom
         image.addEventListener('click', function(e) {
-            // Si es un doble clic rápido
-            if (e.detail === 2) {
-                this.classList.toggle('zoomed');
-            }
+            if (e.detail === 2) this.classList.toggle('zoomed');
         });
-
         slide.appendChild(image);
         modalTrack.appendChild(slide);
     });
 }
 
-function openModal(idx) {
-    if (modalImages.length === 0) setupModal();
+function openModal(idx, groupSelector) {
+    setupModalGroup(groupSelector); // Cargamos solo el grupo correspondiente
     modalIndex = idx;
     resetZooms();
     updateModal();
@@ -294,45 +286,46 @@ function closeModal(){
     modal.classList.remove("active"); 
 }
 
-// Discriminador Scroll vs Clic
-document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) => {
+/* ASIGNACIÓN DE EVENTOS POR GRUPO */
+
+// GRUPO 1: Ambientes
+document.querySelectorAll(".main-image").forEach((img, index, array) => {
     img.addEventListener('touchstart', () => { isScrolling = false; }, {passive: true});
     img.addEventListener('touchmove', () => { isScrolling = true; }, {passive: true});
     img.addEventListener('touchend', () => {
-        if (!isScrolling) {
-            const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-            openModal(currentImgs.indexOf(img));
-        }
+        if (!isScrolling) openModal(index, ".main-image");
     });
     img.addEventListener('click', (e) => {
-        if (e.pointerType === 'mouse' || !('ontouchstart' in window)) {
-            const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-            openModal(currentImgs.indexOf(img));
-        }
+        if (e.pointerType === 'mouse' || !('ontouchstart' in window)) openModal(index, ".main-image");
     });
 });
 
-/* SWIPE MODAL (Solo funciona si NO hay zoom) */
-modal.addEventListener('touchstart', e => { 
-    touchStartX = e.changedTouches[0].screenX; 
-}, {passive: true});
+// GRUPO 2: Adhesivos
+document.querySelectorAll("#carouselAdhesivos img").forEach((img, index, array) => {
+    img.addEventListener('touchstart', () => { isScrolling = false; }, {passive: true});
+    img.addEventListener('touchmove', () => { isScrolling = true; }, {passive: true});
+    img.addEventListener('touchend', () => {
+        if (!isScrolling) openModal(index, "#carouselAdhesivos img");
+    });
+    img.addEventListener('click', (e) => {
+        if (e.pointerType === 'mouse' || !('ontouchstart' in window)) openModal(index, "#carouselAdhesivos img");
+    });
+});
 
+/* SWIPE MODAL */
+modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
 modal.addEventListener('touchend', e => {
     let touchEndX = e.changedTouches[0].screenX;
-    // Si la imagen actual tiene zoom, permitimos el scroll interno, no el cambio de slide
     const currentImg = modalTrack.querySelectorAll('img')[modalIndex];
     if (currentImg && currentImg.classList.contains('zoomed')) return;
-
     if (touchStartX - touchEndX > 50) moveModal(1);
     if (touchEndX - touchStartX > 50) moveModal(-1);
 }, {passive: true});
 
-/* SCROLL ADHESIVOS */
 function scrollCarousel(dir, btn){
     btn.parentElement.querySelector(".carousel").scrollBy({ left: dir * 200, behavior: "smooth" });
 }
 
-/* WHATSAPP */
 document.getElementById("shareWhatsApp").addEventListener("click", function(e){
     e.preventDefault();
     let mensaje = "*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n" + window.location.href;
