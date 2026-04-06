@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ABU DHABI | GERSA</title>
 
+<meta property="og:title" content="ABU DHABI | Loseta 55x55">
+<meta property="og:description" content="Loseta Verve Abu Dhabi formato 55x55 cm.">
+<meta property="og:image" content="https://gersa-mex.github.io/fichas-tecnicas/abu-dhabi-beige/abu-dhabi-logo-verve.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gersa-mex.github.io/prueba.html">
+<link rel="canonical" href="https://gersa-mex.github.io/prueba.html">
+<meta name="twitter:card" content="summary_large_image">
+
 <style>
 :root{
     --verde:#33cc00;
@@ -46,7 +56,7 @@ body{
     margin-bottom:16px;
 }
 
-/* ===== CARRUSEL PRINCIPAL NATIVO (EL QUE TE GUSTA DE iOS) ===== */
+/* ===== CARRUSEL PRINCIPAL NATIVO (EL FIJO PARA iOS) ===== */
 .main-carousel {
     position: relative;
     margin-bottom: 22px;
@@ -116,6 +126,11 @@ body{
 .tech-item strong{ display:block; font-size:13px; color:#6b7280; }
 .tech-item span{ font-weight:bold; font-size:15px; }
 
+/* ===== FOOTER ===== */
+.footer{ background:var(--azul); color:white; padding:25px 15px; margin-top:40px; text-align:center; }
+.footer-buttons{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+.footer a{ background:var(--verde); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:bold; transition:0.3s; }
+
 /* ===== MODAL ===== */
 .modal{ display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:black; }
 .modal.active{ display:flex; justify-content:center; align-items:center; }
@@ -124,11 +139,9 @@ body{
 .modal-slide img{ max-width:95%; max-height:85%; object-fit: contain; }
 .modal-close{ position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer; z-index:100; }
 
-.footer{ background:var(--azul); color:white; padding:25px 15px; margin-top:40px; text-align:center; }
-.footer a{ background:var(--verde); color:white; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:bold; }
-
 @media(max-width:600px){
     .logo-empresa{ height:32px; }
+    .footer-buttons{ flex-direction:column; }
 }
 </style>
 </head>
@@ -156,8 +169,11 @@ body{
         <div class="tech-grid">
             <div class="tech-item"><strong>Marca</strong><span>Verve</span></div>
             <div class="tech-item"><strong>Modelo</strong><span>Abu Dhabi</span></div>
+            <div class="tech-item"><strong>Color</strong><span>Beige</span></div>
             <div class="tech-item"><strong>Formato</strong><span>55x55</span></div>
-            <div class="tech-item"><strong>Uso</strong><span>Interior</span></div>
+            <div class="tech-item"><strong>Piezas por caja</strong><span>5</span></div>
+            <div class="tech-item"><strong>m2 por caja</strong><span>1.49</span></div>
+            <div class="tech-item"><strong>Uso</strong><span>Interior / cocina</span></div>
             <div class="tech-item"><strong>Acabado</strong><span>Brillante</span></div>
         </div>
     </div>
@@ -175,7 +191,10 @@ body{
 </div>
 
 <div class="footer">
-    <a href="#" id="shareWhatsApp">Compartir por WhatsApp</a>
+    <div class="footer-buttons">
+        <a href="#" id="shareWhatsApp">Compartir por WhatsApp</a>
+    </div>
+    Sistema digital de consulta de producto • Gersa
 </div>
 
 <div class="modal" id="modal">
@@ -186,7 +205,7 @@ body{
 </div>
 
 <script>
-/* === DOTS DEL CARRUSEL NATIVO (EL QUE FUNCIONA EN iOS) === */
+/* === LÓGICA DOTS (MANTENIDA) === */
 const track = document.getElementById("mainTrack");
 const dotsContainer = document.getElementById("mainDots");
 const slides = document.querySelectorAll(".main-slide");
@@ -204,7 +223,7 @@ track.addEventListener("scroll", () => {
     allDots.forEach((dot, i) => dot.classList.toggle("active", i === activeIndex));
 });
 
-/* === LÓGICA DE MODAL INTELIGENTE (SWIPE + CLIC) === */
+/* === LÓGICA MODAL (CLIC + SWIPE + SCROLL FIX) === */
 const modal = document.getElementById("modal");
 const modalTrack = document.getElementById("modalTrack");
 let modalIndex = 0;
@@ -212,7 +231,6 @@ let modalImages = [];
 let touchStartX = 0;
 let isScrolling = false;
 
-// Preparar modal
 function setupModal() {
     const allImgs = document.querySelectorAll(".main-image, #carouselAdhesivos img");
     modalImages = Array.from(allImgs);
@@ -247,30 +265,26 @@ function moveModal(dir){
 
 function closeModal(){ modal.classList.remove("active"); }
 
-/* --- FIX PARA PERMITIR SCROLL Y CLIC AL MISMO TIEMPO --- */
+// Discriminador de Scroll vs Clic para iOS/Android
 document.querySelectorAll(".main-image, #carouselAdhesivos img").forEach((img) => {
-    // Detectamos cuando inicia el toque
     img.addEventListener('touchstart', () => { isScrolling = false; }, {passive: true});
-    
-    // Si el dedo se mueve, es que el usuario está haciendo scroll (deslizando)
     img.addEventListener('touchmove', () => { isScrolling = true; }, {passive: true});
-    
-    // Al soltar el dedo, solo abrimos el modal si NO hubo scroll
-    img.addEventListener('touchend', (e) => {
+    img.addEventListener('touchend', () => {
         if (!isScrolling) {
             const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
             openModal(currentImgs.indexOf(img));
         }
     });
-
-    // Para PC (clic de mouse)
-    img.addEventListener('click', () => {
-        const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
-        openModal(currentImgs.indexOf(img));
+    img.addEventListener('click', (e) => {
+        // En PC el touch no existe, así que el clic siempre funciona
+        if (e.pointerType === 'mouse' || !('ontouchstart' in window)) {
+            const currentImgs = Array.from(document.querySelectorAll(".main-image, #carouselAdhesivos img"));
+            openModal(currentImgs.indexOf(img));
+        }
     });
 });
 
-/* --- SWIPE DENTRO DEL MODAL --- */
+/* SWIPE DENTRO DEL MODAL */
 modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
 modal.addEventListener('touchend', e => {
     let touchEndX = e.changedTouches[0].screenX;
@@ -286,7 +300,7 @@ function scrollCarousel(dir, btn){
 /* WHATSAPP */
 document.getElementById("shareWhatsApp").addEventListener("click", function(e){
     e.preventDefault();
-    let mensaje = "*En GERSA tenemos el piso ideal para ti:*\n\n" + window.location.href;
+    let mensaje = "*En GERSA tenemos el piso ideal para ti:*\n\nLOSETA ABU DHABI\n\n" + window.location.href;
     window.open("https://wa.me/?text=" + encodeURIComponent(mensaje), "_blank");
 });
 </script>
